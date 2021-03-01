@@ -14,8 +14,11 @@ public class Body {
 	protected Vector2D position; //Vector de posicion
 	protected double mass; //Masa del cuerpo
 	
-	public Body() {
-		
+	public Body(String id, Vector2D velocity, Vector2D position, double mass) {
+		this.id = id;
+		this.velocity = velocity;
+		this.position = position;
+		this.mass = mass;
 	}
 	//Getters
 	public String getId() {
