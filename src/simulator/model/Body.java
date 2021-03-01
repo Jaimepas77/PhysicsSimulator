@@ -21,6 +21,7 @@ public class Body {
 		this.position = position;
 		this.mass = mass;
 	}
+	
 	//Getters
 	public String getId() {
 		return id;
@@ -40,7 +41,6 @@ public class Body {
 	}
 	
 	//Metodos a implementar
-	
 	protected void addForce(Vector2D f){
 		force = force.plus(f); //El metodos plus devuelve un Vector cuyo componentes son sumas de componentes de f y force.
 	}
@@ -81,8 +81,5 @@ public class Body {
 		return getState().toString();
 		
 	}
-	
-	
-	
 	
 }
