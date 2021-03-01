@@ -14,6 +14,9 @@ public class Body {
 	protected Vector2D position; //Vector de posicion
 	protected double mass; //Masa del cuerpo
 	
+	public Body() {
+		
+	}
 	//Getters
 	public String getId() {
 		return id;
