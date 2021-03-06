@@ -18,6 +18,7 @@ public class Body {
 	public Body(String id, Vector2D velocity, Vector2D position, double mass) {
 		this.id = id;
 		this.velocity = velocity;
+		resetForce();
 		this.position = position;
 		this.mass = mass;
 	}
@@ -52,7 +53,7 @@ public class Body {
 	protected void move(double t) { //Importante a ser revisado
 		Vector2D a; //Vector aceleracion
 		if(mass != 0) {
-			 a = force.scale(1/mass); // Multiplicamos para dividir .
+			a = force.scale(1/mass); // Multiplicamos para dividir .
 		}
 		else {
 			a = new Vector2D(0,0);
