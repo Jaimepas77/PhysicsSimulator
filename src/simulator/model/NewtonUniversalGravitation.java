@@ -9,17 +9,17 @@ public class NewtonUniversalGravitation implements ForceLaws {
 	//Constante gravitatoria 
 	public static final double GravitationalConstant = 6.67e-11;
 	
-	//Constante gravitatoria autodefinada
+	//Constante gravitatoria autodefinida
 	private double G;
 	
 	
 	public NewtonUniversalGravitation(double G) {
-		//Se define la constante gravitaria en lugar de constante definido por defecto
+		//Se define la constante gravitaria en lugar de la constante definida por defecto
 		this.G = G;
 		
 	}
 	
-	//Contructor por defecto , posiblemente se usa cuando implementa las factorias o no.
+	//Contructor por defecto, posiblemente se usa cuando implementa las factorias o no.
 	public NewtonUniversalGravitation() {
 		this(GravitationalConstant);
 	}
@@ -33,16 +33,19 @@ public class NewtonUniversalGravitation implements ForceLaws {
 				//Sumatorio a lo bruto
 				//Habria que ver como comparar los cuerpos
 				if(bodyi != bodyj) {
-				double force = G * bodyi.getMass() * bodyj.getMass() / Math.pow(bodyj.getPosition().distanceTo(bodyi.getPosition()),2); //Fuerza
-				Vector2D dir = bodyj.getPosition().direction().minus(bodyi.getPosition().direction()) ;//Direccion pj - pi
-				Vector2D f = dir.scale(force);//Vector de fuerza
-				bodyi.addForce(f);
-				
-				//Creo que se puede implementar mejor sabiendo que f se actua uno a otro variando la dirrecion.
-				//el primer for(int i = 0; .........) 
-				//el segundo for (int i = j + 1; i < body.size(); i++)
-				//......
-				//Bodyj.addForce(f.scale(-1))
+					double force = G * bodyi.getMass() * bodyj.getMass() / Math.pow(bodyj.getPosition().distanceTo(bodyi.getPosition()), 2); //Fuerza
+					//Vector2D dir = bodyj.getPosition().direction().minus(bodyi.getPosition().direction()) ;//Direccion pj - pi
+					Vector2D dir = bodyj.getPosition().minus(bodyi.getPosition());//Modificado para calcular la dirección de (pj - pi) ~ REVISAR
+					dir = dir.direction();
+					
+					Vector2D f = dir.scale(force);//Vector de fuerza
+					bodyi.addForce(f);
+
+					//Creo que se puede implementar mejor sabiendo que f se actua uno a otro variando la direccion.
+					//el primer for(int i = 0; .........) 
+					//el segundo for (int i = j + 1; i < body.size(); i++)
+					//......
+					//Bodyj.addForce(f.scale(-1))
 				}
 			}
 		}

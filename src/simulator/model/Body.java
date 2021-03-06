@@ -14,7 +14,7 @@ public class Body {
 	protected Vector2D position; //Vector de posicion
 	protected double mass; //Masa del cuerpo
 	
-	//Contructor
+	//Constructor
 	public Body(String id, Vector2D velocity, Vector2D position, double mass) {
 		this.id = id;
 		this.velocity = velocity;
@@ -60,7 +60,7 @@ public class Body {
 		}
 		
 		//Formulas
-		position = position.plus(velocity.scale(t)).plus(a.scale(t * t * (1/2))) ;//Interpreto que v ,se refiere a Vini.
+		position = position.plus(velocity.scale(t)).plus(a.scale(t * t * (1/2))) ;//Interpreto que v, se refiere a Vini.
 		velocity = velocity.plus(a.scale(t));
 	}
 	
