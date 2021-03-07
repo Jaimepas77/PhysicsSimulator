@@ -7,7 +7,7 @@ import simulator.misc.Vector2D;
 public class NewtonUniversalGravitation implements ForceLaws {
 	
 	//Constante gravitatoria 
-	public static final double GravitationalConstant = 6.67e-11;
+	public static final double GRAVITATIONAL_CONSTANT = 6.67e-11;
 	
 	//Constante gravitatoria autodefinida
 	private double G;
@@ -21,7 +21,7 @@ public class NewtonUniversalGravitation implements ForceLaws {
 	
 	//Contructor por defecto, posiblemente se usa cuando implementa las factorias o no.
 	public NewtonUniversalGravitation() {
-		this(GravitationalConstant);
+		this(GRAVITATIONAL_CONSTANT);
 	}
 	
 	//
