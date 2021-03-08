@@ -34,18 +34,11 @@ public class NewtonUniversalGravitation implements ForceLaws {
 				//Habria que ver como comparar los cuerpos
 				if(bodyi != bodyj) {
 					double force = G * bodyi.getMass() * bodyj.getMass() / Math.pow(bodyj.getPosition().distanceTo(bodyi.getPosition()), 2); //Fuerza
-					//Vector2D dir = bodyj.getPosition().direction().minus(bodyi.getPosition().direction()) ;//Direccion pj - pi
-					Vector2D dir = bodyj.getPosition().minus(bodyi.getPosition());//Modificado para calcular la dirección de (pj - pi) ~ REVISAR
+					Vector2D dir = bodyj.getPosition().minus(bodyi.getPosition());//Modificado para calcular la dirección de (pj - pi) Revisado
 					dir = dir.direction();
 					
 					Vector2D f = dir.scale(force);//Vector de fuerza
 					bodyi.addForce(f);
-
-					//Creo que se puede implementar mejor sabiendo que f se actua uno a otro variando la direccion.
-					//el primer for(int i = 0; .........) 
-					//el segundo for (int i = j + 1; i < body.size(); i++)
-					//......
-					//Bodyj.addForce(f.scale(-1))
 				}
 			}
 		}

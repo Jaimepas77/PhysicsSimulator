@@ -17,13 +17,12 @@ public class PhysicsSimulator {
 		if(realTime > 0.0)
 			this.stepTime = realTime;
 		else
-			throw new IllegalArgumentException("Tiempo no válido");
+			throw new IllegalArgumentException("Tiempo no válido.");
 		
 		if(law != null)
 			this.law = law;
 		else
-			throw new IllegalArgumentException("Ley de fuerza no válida");
-		
+			throw new IllegalArgumentException("Ley de fuerza no válida.");
 		
 		actualTime = 0.0;
 	}

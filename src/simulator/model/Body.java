@@ -70,10 +70,10 @@ public class Body {
 		// build a JSONObject from a string en este caso es complicado
 		JSONObject js = new JSONObject();
 		js.put("id", id);
-		js.put("m",mass);
-		js.put("p",position);
-		js.put("v",velocity);
-		js.put("f", force);
+		js.put("m", mass);
+		js.put("p", position.asJSONArray());
+		js.put("v", velocity.asJSONArray());
+		js.put("f", force.asJSONArray());
 		return js;
 		
 	}
@@ -82,5 +82,5 @@ public class Body {
 		return getState().toString();
 		
 	}
-	
+
 }
