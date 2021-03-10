@@ -10,7 +10,7 @@ public class MovingTowardsFixedPoint implements ForceLaws {
 	public static final double g = 9.81;
 	
 	//Valores para definir
-	private Vector2D centerOfUniverse; // is not used!!!
+	private Vector2D centerOfUniverse; // Refencia del centro
 	private double  gDef;
 	
 	public MovingTowardsFixedPoint(Vector2D c, double g) {
@@ -34,8 +34,8 @@ public class MovingTowardsFixedPoint implements ForceLaws {
 	
 	public void apply(List<Body> bs) {
 		for(Body body : bs){
-			//F = m * a -----> F = m * -g * di;
-			body.addForce(body.position.direction().scale(body.getMass()* gDef * (-1)));
+			//F = m * a -----> F = m * -g * di; Tomando (0,0) como refencia. 
+			body.addForce(centerOfUniverse.minus(body.position.direction().scale(body.getMass()* gDef )));
 		}
 	}
 
