@@ -30,19 +30,22 @@ public class NewtonUniversalGravitation implements ForceLaws {
 		for(Body bodyi : bs) {//Cuerpo Bi, quien "aplicado" la fuerca
 			for(Body bodyj : bs)//Cuerpos Bj , quienes "aplican" la fuerza
 			{
-				//Sumatorio a lo bruto
-				//Habria que ver como comparar los cuerpos
-				if(bodyi != bodyj) {
-					double force = G * bodyi.getMass() * bodyj.getMass() / Math.pow(bodyj.getPosition().distanceTo(bodyi.getPosition()), 2); //Fuerza
-					Vector2D dir = bodyj.getPosition().minus(bodyi.getPosition());//Modificado para calcular la dirección de (pj - pi) Revisado
-					dir = dir.direction();
-					
-					Vector2D f = dir.scale(force);//Vector de fuerza
+				//Sumatorio
+				if(bodyi != bodyj) {//Si no es el mismo
+					Vector2D f = force(bodyi,bodyj);
 					bodyi.addForce(f);
 				}
 			}
 		}
 		
+	}
+	
+	private Vector2D force(Body bodyi, Body bodyj) {
+		double force = G * bodyi.getMass() * bodyj.getMass() / Math.pow(bodyj.getPosition().distanceTo(bodyi.getPosition()), 2); //Fuerza
+		Vector2D dir = bodyj.getPosition().minus(bodyi.getPosition());//calcular la dirección de (pj - pi) 
+		dir = dir.direction();
+		Vector2D f = dir.scale(force);//Vector de fuerza
+		return f;
 	}
 	
 	public String toSring() { //Actual desconoce el uso
