@@ -29,7 +29,7 @@ public abstract class Builder <T>  {
 				return null;
 			}
 		}
-		return createTheInstance(info);//Se crea la instancia con info
+		return createTheInstance(info.getJSONObject("data"));//Se crea la instancia con data.Ya que hemos reconocido el tipo
 		
 	}
 	
@@ -46,7 +46,7 @@ public abstract class Builder <T>  {
 		return new JSONObject();
 	}
 	
-	protected abstract T createTheInstance(JSONObject info) ;//Debe lazar JSONEXception.
+	protected abstract T createTheInstance(JSONObject data) ;//Debe lazar JSONEXception.
 	
 
 }
