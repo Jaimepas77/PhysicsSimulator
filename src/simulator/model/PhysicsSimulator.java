@@ -43,8 +43,7 @@ public class PhysicsSimulator {
 	
 	public void addBody(Body b)
 	{
-		for(Body x : bodies)
-			if(x == b)
+		if(bodies.contains(b))
 				throw new IllegalArgumentException("El cuerpo ya existe.");
 		bodies.add(b);
 	}
