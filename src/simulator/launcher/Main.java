@@ -1,5 +1,7 @@
 package simulator.launcher;
 
+import java.util.ArrayList;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -9,8 +11,9 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.json.JSONObject;
 
+import simulator.control.MassEqualStates;
 import simulator.control.StateComparator;
-import simulator.factories.Factory;
+import simulator.factories.*;
 import simulator.model.Body;
 import simulator.model.ForceLaws;
 
@@ -21,6 +24,7 @@ public class Main {
 	private final static Double _dtimeDefaultValue = 2500.0;
 	private final static String _forceLawsDefaultValue = "nlug";
 	private final static String _stateComparatorDefaultValue = "epseq";
+	private final static Integer _defaultStep = 150;
 
 	// some attributes to stores values corresponding to command-line parameters
 	//
@@ -28,6 +32,9 @@ public class Main {
 	private static String _inFile = null;
 	private static JSONObject _forceLawsInfo = null;
 	private static JSONObject _stateComparatorInfo = null;
+	private static Integer _step =  null;
+	private static String _outFile = null;
+	private static String _expFile = null;
 
 	// factories
 	private static Factory<Body> _bodyFactory;
@@ -36,10 +43,21 @@ public class Main {
 
 	private static void init() {
 		// TODO initialize the bodies factory
-
+			ArrayList<Builder<Body>> bodyBuilders = new ArrayList<>();
+			bodyBuilders.add(new BasicBodyBuilder());
+			bodyBuilders.add(new MassLossingBodyBuilder());
+			_bodyFactory = new BuilderBasedFactory<>(bodyBuilders);
 		// TODO initialize the force laws factory
-
+			ArrayList<Builder<ForceLaws>> forceLawsBuilders = new ArrayList<>();
+			forceLawsBuilders.add(new NewtonUniversalGravitationBuilder());
+			forceLawsBuilders.add(new MovingTowardsFixedPointBuilder());
+			forceLawsBuilders.add(new NoForceBuilder());
+			_forceLawsFactory = new BuilderBasedFactory<>(forceLawsBuilders);
 		// TODO initialize the state comparator
+			ArrayList<Builder<StateComparator>> stateComparatorBuilders = new ArrayList<>();
+			stateComparatorBuilders.add(new MassEqualStatesBuilder());
+			stateComparatorBuilders.add(new EpsilonEqualStatesBuilder());
+			_stateComparatorFactory = new BuilderBasedFactory<>(stateComparatorBuilders);
 	}
 
 	private static void parseArgs(String[] args) {
@@ -57,7 +75,10 @@ public class Main {
 			parseHelpOption(line, cmdLineOptions);
 			parseInFileOption(line);
 			// TODO add support of -o, -eo, and -s (define corresponding parse methods)
-
+			parseOutFileoption(line);//-o
+			parseExcepedOutFileOption(line);//-eo
+			parseStepOption(line);
+			//
 			parseDeltaTimeOption(line);
 			parseForceLawsOption(line);
 			parseStateComparatorOption(line);
@@ -80,6 +101,7 @@ public class Main {
 
 	}
 
+
 	private static Options buildOptions() {
 		Options cmdLineOptions = new Options();
 
@@ -89,8 +111,17 @@ public class Main {
 		// input file
 		cmdLineOptions.addOption(Option.builder("i").longOpt("input").hasArg().desc("Bodies JSON input file.").build());
 
-		// TODO add support for -o, -eo, and -s (add corresponding information to
-		// cmdLineOptions)
+		// TODO add support for -o, -eo, and -s (add corresponding information to cmdLineOptions)
+		
+		// out file 
+		cmdLineOptions.addOption(Option.builder("o").longOpt("output").hasArg().desc("Define out put file").build());
+		
+		// expected file
+		cmdLineOptions.addOption(Option.builder("eo").longOpt("expected-output").hasArg().desc("Define exoected out put file").build());
+		
+		//Step
+		cmdLineOptions.addOption(Option.builder("s").longOpt("steps").hasArg().desc("step of simulation . Default value : 150").build());
+		
 
 		// delta-time
 		cmdLineOptions.addOption(Option.builder("dt").longOpt("delta-time").hasArg()
@@ -155,6 +186,26 @@ public class Main {
 		} catch (Exception e) {
 			throw new ParseException("Invalid delta-time value: " + dt);
 		}
+	}
+	
+	private static void parseStepOption(CommandLine line) throws ParseException {//Revisar
+		String ds = line.getOptionValue("s",_defaultStep.toString());//Para caso de que lanza una exception
+		try {
+			_step = Integer.parseInt(ds);
+		}
+		catch(Exception e) {
+			throw new ParseException("Invalid step value: " + ds);
+		}
+		
+	}
+
+	private static void parseExcepedOutFileOption(CommandLine line) {//Revisar
+		_expFile = line.getOptionValue("eo");//Se compararia si es null en startBatchMode()
+	}
+
+	private static void parseOutFileoption(CommandLine line) {//Revisar
+		_outFile  = line.getOptionValue("o");//Se compararia si es null en startBatchMode()
+		
 	}
 
 	private static JSONObject parseWRTFactory(String v, Factory<?> factory) {

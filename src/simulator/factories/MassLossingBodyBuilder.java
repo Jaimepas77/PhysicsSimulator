@@ -9,7 +9,7 @@ import simulator.model.MassLossingBody;
 public class MassLossingBodyBuilder extends Builder<Body> {
 
 	
-	MassLossingBodyBuilder(){
+	public MassLossingBodyBuilder(){
 		super("mlb",
 				"Mass Losing Body");
 	}
