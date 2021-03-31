@@ -76,7 +76,7 @@ public class Main {
 			parseInFileOption(line);
 			// TODO add support of -o, -eo, and -s (define corresponding parse methods)
 			parseOutFileOption(line);//-o
-			parseExpectedFileOption(line);//-eo
+			parseExpectedOutPutFileOption(line);//-eo
 			parseStepOption(line);//-s
 			//
 			parseDeltaTimeOption(line);
@@ -117,7 +117,7 @@ public class Main {
 		cmdLineOptions.addOption(Option.builder("o").longOpt("output").hasArg().desc("Define out put file").build());
 		
 		// expected file
-		cmdLineOptions.addOption(Option.builder("eo").longOpt("expected-output").hasArg().desc("Define expected file").build());
+		cmdLineOptions.addOption(Option.builder("eo").longOpt("expected-output").hasArg().desc("Define expected out put file").build());
 		
 		//Step
 		cmdLineOptions.addOption(Option.builder("s").longOpt("steps").hasArg().desc("step of simulation . Default value : 150").build());
@@ -199,7 +199,7 @@ public class Main {
 		
 	}
 
-	private static void parseExpectedFileOption(CommandLine line) {//Revisar
+	private static void parseExpectedOutPutFileOption(CommandLine line) {//Revisar
 		_expFile = line.getOptionValue("eo");//Se compararia si es null en startBatchMode()
 	}
 
