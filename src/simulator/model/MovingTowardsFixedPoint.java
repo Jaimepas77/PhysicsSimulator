@@ -35,7 +35,7 @@ public class MovingTowardsFixedPoint implements ForceLaws {
 	public void apply(List<Body> bs) {
 		for(Body body : bs){
 			//F = m * a -----> F = m * -g * di; Tomando (0,0) como refencia. 
-			body.addForce(centerOfUniverse.minus(body.position.direction().scale(body.getMass()* gDef )));
+			body.addForce(centerOfUniverse.minus(body.getPosition()).direction().scale(gDef * body.getMass()) );
 		}
 	}
 

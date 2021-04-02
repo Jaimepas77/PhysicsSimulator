@@ -78,14 +78,14 @@ public class Body {
 	protected void move(double t) { //Importante a ser revisado
 		Vector2D a; //Vector aceleracion
 		if(mass != 0) {
-			a = force.scale(1/mass); // Multiplicamos para dividir .
+			a = force.scale(1.0/mass); // Multiplicamos para dividir .
 		}
 		else {
 			a = new Vector2D(0,0);
 		}
 		
 		//Formulas
-		position = position.plus(velocity.scale(t)).plus(a.scale(t * t * (1/2))) ;//Interpreto que v, se refiere a Vini.
+		position = position.plus(velocity.scale(t).plus(a.scale(0.5 * t * t)) );//Interpreto que v, se refiere a Vini.
 		velocity = velocity.plus(a.scale(t));
 	}
 	

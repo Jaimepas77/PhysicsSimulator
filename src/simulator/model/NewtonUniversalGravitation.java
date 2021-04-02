@@ -37,15 +37,18 @@ public class NewtonUniversalGravitation implements ForceLaws {
 				}
 			}
 		}
-		
 	}
 	
-	private Vector2D force(Body bodyi, Body bodyj) {
-		double force = G * bodyi.getMass() * bodyj.getMass() / Math.pow(bodyj.getPosition().distanceTo(bodyi.getPosition()), 2); //Fuerza
-		Vector2D dir = bodyj.getPosition().minus(bodyi.getPosition());//calcular la dirección de (pj - pi) 
+	private Vector2D force(Body a, Body b) {
+		/*double force = G * a.getMass() * b.getMass() / Math.pow(b.getPosition().distanceTo(a.getPosition()), 2); //Fuerza
+		Vector2D dir = b.getPosition().minus(a.getPosition());//calcular la dirección de (pj - pi) 
 		dir = dir.direction();
 		Vector2D f = dir.scale(force);//Vector de fuerza
-		return f;
+		return f;*/
+		Vector2D delta = b.getPosition().minus(a.getPosition());
+	    double dist = delta.magnitude();
+	    double magnitude = dist>0 ? (G * a.getMass() * b.getMass()) / (dist * dist) : 0.0;
+	    return delta.direction().scale(magnitude);
 	}
 	
 	public String toSring() { //Actual desconoce el uso
