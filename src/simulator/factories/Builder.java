@@ -1,4 +1,4 @@
-package simulator.factories;
+	package simulator.factories;
 
 
 import org.json.JSONObject;
@@ -16,7 +16,7 @@ public abstract class Builder <T>  {
 	};
 	
 	public T createInstance(JSONObject info) {//Revisar 
-		JSONObject template = getBuilderInfo();
+		/*JSONObject template = getBuilderInfo();
 		//Try catch de Jsonexception 
 		if(!info.has("Type") || !info.has("data") ||info.getString("type") != this.type)//Si no hay claves  o type no corresponde al "contructor"
 		{
@@ -26,27 +26,28 @@ public abstract class Builder <T>  {
 		{
 			if(!info.has(key))
 			{
-				return null;
+				//return null;
+				throw new IllegalArgumentException("Datos erroneos en la creacion del objeto...");
 			}
-		}
-		return createTheInstance(info.getJSONObject("data"));//Se crea la instancia con data.Ya que hemos reconocido el tipo
-		
+		}*/
+		if(type == null || type.equals(info.getString("type")))
+			return null;
+		return (T)createTheInstance(info.getJSONObject("data"));//Se crea la instancia con data.Ya que hemos reconocido el tipo
 	}
 	
 	public JSONObject getBuilderInfo() {//Construccion de una plantilla.
 		JSONObject info = new JSONObject();
 		info.put("type", type);
 		info.put("data", createData());
-		info.put("desc",desc);
+		info.put("desc", desc);
 		return info;
-		
 	}
+	
 	protected JSONObject createData() {
-		//Por defecto ,se intrepreta como sin parametro para plantilla(No tiene claves). 
+		//Por defecto, se intrepreta como sin parametro para plantilla (No tiene claves). 
 		return new JSONObject();
 	}
 	
-	protected abstract T createTheInstance(JSONObject data) ;//Debe lazar JSONEXception.
+	protected abstract T createTheInstance(JSONObject data);//Debe lazar JSONEXception.
 	
-
 }
