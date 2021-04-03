@@ -15,16 +15,17 @@ import simulator.model.PhysicsSimulator;
 public class Controller {
 	
 	private PhysicsSimulator simulator;
-	private  Factory<Body> BodyFactory;
-	Controller(PhysicsSimulator p , Factory<Body> f) {
-		simulator = p;
-		BodyFactory = f;
+	private Factory<Body> bodyFactory;
+	
+	Controller(PhysicsSimulator simulator, Factory<Body> bodyFactory) {
+		this.simulator = simulator;
+		this.bodyFactory = bodyFactory;
 	}
 
-	public void loadBies(InputStream in) {//Iniciar los cuerpos 
+	public void loadBodies(InputStream in) {//Iniciar los cuerpos 
 		JSONObject jsin = new JSONObject(new JSONTokener(in));//Convertir a JSONObject
 		
-		JSONArray bodies = jsin.getJSONArray("Bodies");//Se supone lo que lleva es un JSONArryas cuyo elementos son JSONObject de bodys
+		JSONArray bodies = jsin.getJSONArray("bodies");//Se supone lo que lleva es un JSONArryas cuyo elementos son JSONObject de bodys
 		
 		for(int i = 0 ; i< bodies.length();i++) {
 			simulator.addBody(createBody(bodies.getJSONObject(i)));
@@ -32,47 +33,49 @@ public class Controller {
 		
 	}
 	
-	public void run(int n ,OutputStream out , InputStream expOut ,StateComparator cmp) {//Ejecuta el simulador n veces , comparando el estado con lo esperado cada vez. 
+	public void run(int n, OutputStream out, InputStream expOut, StateComparator cmp) {//Ejecuta el simulador n veces, comparando el estado con lo esperado cada vez. 
 		
 		JSONObject JSONCmpS = null;//Para comparar nuestro salida con los esperados
 		PrintStream p = new PrintStream(out);//Salida
 		
 		if(expOut != null) {
-			JSONCmpS =new JSONObject(new JSONTokener(expOut));
+			JSONCmpS = new JSONObject(new JSONTokener(expOut));//JSON con la salida esperada
 		}
 		
 		p.println("{");
-		p.println("\"states\":[");
+		p.println("\"states\": [");
+		
 		//Comparar Estado inicial
-		JSONObject stateini = simulator.getState();
-		p.println(stateini);
-		JSONObject JSONcmp = JSONCmpS.getJSONArray("states").getJSONObject(0);
-		if(JSONCmpS != null) {
-			if(cmp.equal(stateini, JSONcmp)) {
-				//throw new NotEqualStatesException(state,statecmp,0) hay que crear
-			}
+		JSONObject stateIni = simulator.getState();//Salida inicial obtenida
+		p.println(stateIni);
+		
+		JSONObject stateCmp = JSONCmpS.getJSONArray("states").getJSONObject(0);//Salida inicial esperada
+		
+		if(JSONCmpS != null && !cmp.equal(stateIni, stateCmp)) {//si la salida no es la esperada...
+				//throw new NotEqualStatesException(stateIni, stateCmp, 0) hay que crear
 		}
-		//Comparar los estados restantes
+		
+		//Ejecutar los estados restantes
 		for(int i = 1; i <= n ; i++) {
 			simulator.advance();
-			JSONObject state = simulator.getState();
-			p.println(state);
-			JSONObject statecmp = JSONCmpS.getJSONArray("states").getJSONObject(i);
-			if(JSONCmpS != null) {
-				if(cmp.equal(state, statecmp)) {
-					//throw new NotEqualStatesException(state,statecmp,n) hay que crear
-				}
+			
+			JSONObject stateAct = simulator.getState();//Salida actual
+			p.println(stateAct);
+			
+			stateCmp = JSONCmpS.getJSONArray("states").getJSONObject(i);//Se actualiza la salida esperada en el paso actual
+			
+			if(JSONCmpS != null && !cmp.equal(stateAct, stateCmp)) {//si la salida no es la esperada...
+				//throw new NotEqualStatesException(stateAct, stateCmp, i) hay que crear
 			}
 		}
+		
 		p.println("]");
 		p.println("}");
 	
 	}
 	
 	private Body createBody(JSONObject info){
-		
-		return BodyFactory.createInstance(info);
-		
+		return bodyFactory.createInstance(info);
 	}
 	
 	
