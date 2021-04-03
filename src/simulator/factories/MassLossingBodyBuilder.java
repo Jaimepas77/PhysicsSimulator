@@ -32,7 +32,7 @@ public class MassLossingBodyBuilder extends Builder<Body> {
 		data.put("id", "b1");
 		data.put("p", p.asJSONArray());
 		data.put("v", v.asJSONArray());
-		data.put("m", 5.97e24);
+		data.put("m", 3.0e28);//5.97e24 es para el BasicBody
 		data.put("freq", 1e3);
 		data.put("factor", 1e-3);
 		return data;
