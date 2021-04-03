@@ -6,10 +6,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class PhysicsSimulator {
-	double stepTime; //Tiempo real por paso
-	ForceLaws law; //Ley gravitacional a aplicar
-	List<Body> bodies; //Lista de cuerpos existentes en la simulación
-	double actualTime; //Momento de la simulación en el que nos encontramos
+	private double stepTime; //Tiempo real por paso
+	private ForceLaws law; //Ley gravitacional a aplicar
+	private List<Body> bodies; //Lista de cuerpos existentes en la simulación
+	private double actualTime; //Momento de la simulación en el que nos encontramos
 	
 	//Constructor
 	public PhysicsSimulator(double realTime, ForceLaws law)
@@ -35,7 +35,7 @@ public class PhysicsSimulator {
 		
 		law.apply(bodies);
 		
-		for(Body x: bodies)
+		for(Body x : bodies)
 			x.move(stepTime);
 		
 		actualTime += stepTime;

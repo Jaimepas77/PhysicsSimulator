@@ -1,5 +1,10 @@
 package simulator.launcher;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import org.apache.commons.cli.CommandLine;
@@ -11,11 +16,13 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.json.JSONObject;
 
+import simulator.control.Controller;
 import simulator.control.MassEqualStates;
 import simulator.control.StateComparator;
 import simulator.factories.*;
 import simulator.model.Body;
 import simulator.model.ForceLaws;
+import simulator.model.PhysicsSimulator;
 
 public class Main {
 
@@ -34,7 +41,7 @@ public class Main {
 	private static JSONObject _stateComparatorInfo = null;
 	private static Integer _step =  null;
 	private static String _outFile = null;
-	private static String _expFile = null;
+	private static String _expOutFile = null;
 
 	// factories
 	private static Factory<Body> _bodyFactory;
@@ -46,18 +53,18 @@ public class Main {
 			ArrayList<Builder<Body>> bodyBuilders = new ArrayList<>();
 			bodyBuilders.add(new BasicBodyBuilder());
 			bodyBuilders.add(new MassLossingBodyBuilder());
-			_bodyFactory = new BuilderBasedFactory<>(bodyBuilders);
+			_bodyFactory = new BuilderBasedFactory<Body>(bodyBuilders);
 		// TODO initialize the force laws factory
 			ArrayList<Builder<ForceLaws>> forceLawsBuilders = new ArrayList<>();
 			forceLawsBuilders.add(new NewtonUniversalGravitationBuilder());
 			forceLawsBuilders.add(new MovingTowardsFixedPointBuilder());
 			forceLawsBuilders.add(new NoForceBuilder());
-			_forceLawsFactory = new BuilderBasedFactory<>(forceLawsBuilders);
+			_forceLawsFactory = new BuilderBasedFactory<ForceLaws>(forceLawsBuilders);
 		// TODO initialize the state comparator
 			ArrayList<Builder<StateComparator>> stateComparatorBuilders = new ArrayList<>();
 			stateComparatorBuilders.add(new MassEqualStatesBuilder());
 			stateComparatorBuilders.add(new EpsilonEqualStatesBuilder());
-			_stateComparatorFactory = new BuilderBasedFactory<>(stateComparatorBuilders);
+			_stateComparatorFactory = new BuilderBasedFactory<StateComparator>(stateComparatorBuilders);
 	}
 
 	private static void parseArgs(String[] args) {
@@ -200,7 +207,7 @@ public class Main {
 	}
 
 	private static void parseExpectedOutPutFileOption(CommandLine line) {//Revisar
-		_expFile = line.getOptionValue("eo");//Se compararia si es null en startBatchMode()
+		_expOutFile = line.getOptionValue("eo");//Se compararia si es null en startBatchMode()
 	}
 
 	private static void parseOutFileOption(CommandLine line) {//Revisar
@@ -264,6 +271,25 @@ public class Main {
 
 	private static void startBatchMode() throws Exception {
 		// TODO complete this method
+		InputStream is = new FileInputStream(new File(_inFile));
+		OutputStream os = _outFile == null ? 
+				System.out : new FileOutputStream(new File(_outFile));
+		
+		//Crear el simulator
+		PhysicsSimulator simulator = new PhysicsSimulator(_dtime, _forceLawsFactory.createInstance(_forceLawsInfo));//Revisable
+		Controller controller = new Controller(simulator, _bodyFactory);
+		
+		InputStream expOut = null;
+		
+		StateComparator stateCmp = null;
+		if(_expOutFile != null){
+			expOut = new FileInputStream(new File(_expOutFile));
+			stateCmp = _stateComparatorFactory.createInstance(_stateComparatorInfo);
+		}
+		
+		controller.run(_step, os, expOut, stateCmp);
+		
+		controller.loadBodies(is);
 	}
 
 	private static void start(String[] args) throws Exception {

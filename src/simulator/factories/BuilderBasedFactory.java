@@ -13,21 +13,24 @@ public class BuilderBasedFactory<T> implements Factory<T> {
 	public BuilderBasedFactory(List <Builder<T>> builders) {
 		listBuilder = new ArrayList<>(builders); //Invoca construtor por copia
 		
-		for(Builder<T> b : listBuilder) {//Inicializa otra lista
+		factoryElem = new ArrayList<>();//Inicializar la lista de objetos JSON
+		for(Builder<T> b : listBuilder) {//Introduce los valores
 			factoryElem.add(b.getBuilderInfo());
 		}
 	}
 	@Override
 	public T createInstance(JSONObject info) {
 		if(info == null) {
-			throw new IllegalArgumentException("Valor inv¨¢lido para createInstance");
+			throw new IllegalArgumentException("Valor invalido para createInstance");
 		}
+		
 		for(Builder<T> b : listBuilder) {
 			if(b.createInstance(info) != null) {
 				return b.createInstance(info);
 			}
 		}
-		return null;
+
+		throw new IllegalArgumentException("Formato JSON incorrecto (no es compatible con ninguno de los tipos)");
 	}
 
 	@Override

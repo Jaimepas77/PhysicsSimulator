@@ -17,7 +17,7 @@ public class Controller {
 	private PhysicsSimulator simulator;
 	private Factory<Body> bodyFactory;
 	
-	Controller(PhysicsSimulator simulator, Factory<Body> bodyFactory) {
+	public Controller(PhysicsSimulator simulator, Factory<Body> bodyFactory) {
 		this.simulator = simulator;
 		this.bodyFactory = bodyFactory;
 	}
@@ -27,13 +27,13 @@ public class Controller {
 		
 		JSONArray bodies = jsin.getJSONArray("bodies");//Se supone lo que lleva es un JSONArryas cuyo elementos son JSONObject de bodys
 		
-		for(int i = 0 ; i< bodies.length();i++) {
+		for(int i = 0; i< bodies.length(); i++) {
 			simulator.addBody(createBody(bodies.getJSONObject(i)));
 		}
 		
 	}
 	
-	public void run(int n, OutputStream out, InputStream expOut, StateComparator cmp) {//Ejecuta el simulador n veces, comparando el estado con lo esperado cada vez. 
+	public void run(int steps, OutputStream out, InputStream expOut, StateComparator cmp) {//Ejecuta el simulador n veces, comparando el estado con lo esperado cada vez. 
 		
 		JSONObject JSONCmpS = null;//Para comparar nuestro salida con los esperados
 		PrintStream p = new PrintStream(out);//Salida
@@ -56,7 +56,7 @@ public class Controller {
 		}
 		
 		//Ejecutar los estados restantes
-		for(int i = 1; i <= n ; i++) {
+		for(int i = 1; i <= steps ; i++) {
 			simulator.advance();
 			
 			JSONObject stateAct = simulator.getState();//Salida actual

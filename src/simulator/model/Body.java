@@ -48,24 +48,13 @@ public class Body {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
+	
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Body other = (Body) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+	public boolean equals(Object obj){
+		Body other = (Body)obj;
+		return this.id == other.id;
 	}
-
+	
 	//Metodos a implementar
 	protected void addForce(Vector2D f){
 		force = force.plus(f); //El metodos plus devuelve un Vector cuyo componentes son sumas de componentes de f y force.
