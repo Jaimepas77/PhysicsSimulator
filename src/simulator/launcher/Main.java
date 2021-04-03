@@ -287,9 +287,8 @@ public class Main {
 			stateCmp = _stateComparatorFactory.createInstance(_stateComparatorInfo);
 		}
 		
-		controller.run(_step, os, expOut, stateCmp);
-		
 		controller.loadBodies(is);
+		controller.run(_step, os, expOut, stateCmp);
 	}
 
 	private static void start(String[] args) throws Exception {
