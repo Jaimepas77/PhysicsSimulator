@@ -31,7 +31,7 @@ public abstract class Builder <T>  {
 				throw new IllegalArgumentException("Datos erroneos en la creacion del objeto...");
 			}
 		}*/
-		if(type == null || type.equals(info.getString("type")))//Esto se parece más a lo exlicado en las transparencias... ns
+		if(type == null || !type.equals(info.getString("type")))//Basado en las diapositivas
 			return null;
 		try{
 			return (T)createTheInstance(info.getJSONObject("data"));//Se crea la instancia con data.Ya que hemos reconocido el tipo
