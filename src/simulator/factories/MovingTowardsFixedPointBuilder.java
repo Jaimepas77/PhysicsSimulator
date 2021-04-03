@@ -26,9 +26,8 @@ public class MovingTowardsFixedPointBuilder  extends Builder<ForceLaws> {
 		}
 		else c = new Vector2D();
 		
-		return new  MovingTowardsFixedPoint(c , g);
+		return new  MovingTowardsFixedPoint(c, g);
 	}
-	
 
 	protected JSONObject createData() {
 		JSONObject data = new JSONObject();

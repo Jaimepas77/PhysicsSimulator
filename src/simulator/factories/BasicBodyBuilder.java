@@ -11,16 +11,16 @@ public class BasicBodyBuilder extends Builder<Body>{
 	
 	public BasicBodyBuilder() {
 		super("Basic Body",
-			  "Defaul Body");
+			  "Default Body");
 	}
 	@Override
 	protected Body createTheInstance(JSONObject data) {
-	
+		
 		String id = data.getString("id");
 		double m = data.getDouble("m");
 		Vector2D v = new Vector2D(data.getJSONArray("v").getDouble(0),data.getJSONArray("v").getDouble(1));
 		Vector2D p = new Vector2D(data.getJSONArray("p").getDouble(0),data.getJSONArray("p").getDouble(1));
-		return new Body(id,v,p,m);	
+		return new Body(id,v,p,m);
 		
 	}
 	

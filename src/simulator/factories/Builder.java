@@ -16,7 +16,7 @@ public abstract class Builder <T>  {
 	};
 	
 	public T createInstance(JSONObject info) {//Revisar 
-		/*JSONObject template = getBuilderInfo();
+		JSONObject template = getBuilderInfo();
 		//Try catch de Jsonexception 
 		if(!info.has("Type") || !info.has("data") ||info.getString("type") != this.type)//Si no hay claves  o type no corresponde al "contructor"
 		{
@@ -29,9 +29,9 @@ public abstract class Builder <T>  {
 				//return null;
 				throw new IllegalArgumentException("Datos erroneos en la creacion del objeto...");
 			}
-		}*/
-		if(type == null || type.equals(info.getString("type")))
-			return null;
+		}
+		/*if(type == null || type.equals(info.getString("type")))//Esto se parece más a lo exlicado en las transparencias... ns
+			return null;*/
 		return (T)createTheInstance(info.getJSONObject("data"));//Se crea la instancia con data.Ya que hemos reconocido el tipo
 	}
 	
