@@ -94,15 +94,15 @@ public class Controller {
 			expectedBodies.put(stateCmp.getJSONArray("bodies").get(j));
 			
 			//Pasamos a JSONObject para poder usar comparatores
-			JSONObject actBody = new JSONObject();
-			actBody.put("bodies", actBodies);
-			actBody.put("time" ,stateAct.getDouble("time"));
+			JSONObject stateActAux = new JSONObject();
+			stateActAux.put("bodies", actBodies);
+			stateActAux.put("time" ,stateAct.getDouble("time"));
 			
-			JSONObject expectedBody = new JSONObject();
-			expectedBody.put("bodies", actBodies);
-			expectedBody.put("time" ,stateCmp.getDouble("time"));
+			JSONObject stateCmpAux = new JSONObject();
+			stateCmpAux.put("bodies", expectedBodies);
+			stateCmpAux.put("time" ,stateCmp.getDouble("time"));
 			
-			if(!cmp.equal(actBody, expectedBody))
+			if(!cmp.equal(stateActAux, stateCmpAux))//Se compara los cuerpos uno a uno
 				return j;
 			else {
 				j++;
