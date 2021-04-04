@@ -24,11 +24,11 @@ public class EpsilonEqualStates implements StateComparator {
 		
 		JSONArray ja1 = s1.getJSONArray("bodies");
 		JSONArray ja2 = s2.getJSONArray("bodies");
-		if(ja1.length() != ja2.length())//Revisar que tienen el mismo nº de cuerpos
+		if(ja1.length() != ja2.length())//Revisar que tienen el mismo numerode cuerpos
 			return false;
 
 		for (int i = 0; i < ja1.length(); i++) {//Revisar cada cuerpo con su correspondiente
-			if(ja1.getJSONObject(i).getString("id") != ja2.getJSONObject(i).getString("id"))
+			if(!ja1.getJSONObject(i).getString("id").equals(ja2.getJSONObject(i).getString("id"))) 
 				return false;
 			
 			double m1 = ja1.getJSONObject(i).getDouble("m"), m2 = ja2.getJSONObject(i).getDouble("m");

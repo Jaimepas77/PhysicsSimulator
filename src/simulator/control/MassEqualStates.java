@@ -2,6 +2,7 @@ package simulator.control;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import java.lang.*;
 
 public class MassEqualStates implements StateComparator{
 
@@ -16,7 +17,7 @@ public class MassEqualStates implements StateComparator{
 			return false;
 
 		for (int i = 0; i < ja1.length(); i++) {
-			if(ja1.getJSONObject(i).getString("id") != ja2.getJSONObject(i).getString("id"))
+			if(!ja1.getJSONObject(i).getString("id").equals(ja2.getJSONObject(i).getString("id")))
 				return false;
 			if(ja1.getJSONObject(i).getDouble("m") != ja2.getJSONObject(i).getDouble("m"))
 				return false;
