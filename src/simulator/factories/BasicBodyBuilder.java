@@ -10,7 +10,7 @@ public class BasicBodyBuilder extends Builder<Body>{
 
 	
 	public BasicBodyBuilder() {
-		super("Basic Body",
+		super("basic",
 			  "Default Body");
 	}
 	@Override

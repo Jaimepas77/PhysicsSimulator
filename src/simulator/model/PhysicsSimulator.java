@@ -1,5 +1,6 @@
 package simulator.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -25,6 +26,8 @@ public class PhysicsSimulator {
 			throw new IllegalArgumentException("Ley de fuerza no válida.");
 		
 		actualTime = 0.0;
+		
+		bodies = new ArrayList<>();
 	}
 	
 	//Métodos

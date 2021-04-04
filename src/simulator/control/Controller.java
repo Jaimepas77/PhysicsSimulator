@@ -49,13 +49,21 @@ public class Controller {
 		//Comparar Estado inicial
 		JSONObject stateIni = simulator.getState();//Salida inicial obtenida
 		p.println(stateIni);
+		p.print(",");//Coma raro de la salida esperada
 		
-		JSONObject stateCmp = JSONCmpS.getJSONArray("states").getJSONObject(0);//Salida inicial esperada
+		JSONObject stateCmp = new JSONObject();//Estado esperdo
 		
-		if(JSONCmpS != null && !cmp.equal(stateIni, stateCmp)) {//si la salida no es la esperada...
-				//throw new NotEqualStatesException(stateIni, stateCmp, 0) hay que crear
+		if(JSONCmpS != null) {
+			stateCmp = JSONCmpS.getJSONArray("states").getJSONObject(0);//Salida inicial esperada
+			
+			if(!cmp.equal(stateIni, stateCmp)) {//si la salida no es la esperada...
+				//Se obtiene la posicion de primer body que muestra la desigualdad con la esperada.Nos podria facilitar con esa informacion(opcional-recomentada por profe)
+				int bodyDiference = positionFirstBodyDiference(stateIni ,stateCmp , cmp);
+				//Lanzar expecion que sirve para las pruebas
+				throw new NotEqualStatesException(stateIni, stateCmp,stateIni.getJSONArray("bodies").getJSONObject(bodyDiference),stateCmp.getJSONArray("bodies").getJSONObject(bodyDiference), steps); 
+			}
 		}
-		
+	
 		//Ejecutar los estados restantes
 		for(int i = 1; i <= steps ; i++) {
 			simulator.advance();
@@ -63,13 +71,18 @@ public class Controller {
 			JSONObject stateAct = simulator.getState();//Salida actual
 			p.println(stateAct);
 			
-			stateCmp = JSONCmpS.getJSONArray("states").getJSONObject(i);//Se actualiza la salida esperada en el paso actual
+			if(i != steps) {//Coma raro de la salida esperada
+				p.print(",");
+			}
 			
-			if(JSONCmpS != null && !cmp.equal(stateAct, stateCmp)) {//si la salida no es la esperada...
-				//Se obtiene la posicion de primer body que muestra la desigualdad con la esperada.Nos podria facilitar con esa informacion(opcional-recomentada por profe)
-				int bodyDiference = positionFirstBodyDiference(stateAct ,stateCmp , cmp);
-				//Lanzar expecion que sirve para las pruebas
-				throw new NotEqualStatesException(stateAct, stateCmp,stateAct.getJSONArray("bodies").getJSONObject(bodyDiference),stateCmp.getJSONArray("bodies").getJSONObject(bodyDiference), steps); 
+			if(JSONCmpS != null) {
+				stateCmp = JSONCmpS.getJSONArray("states").getJSONObject(i);//Se actualiza la salida esperada en el paso actual
+				
+				if(!cmp.equal(stateAct, stateCmp)) {
+					int bodyDiference = positionFirstBodyDiference(stateAct ,stateCmp , cmp);
+					
+					throw new NotEqualStatesException(stateAct, stateCmp,stateAct.getJSONArray("bodies").getJSONObject(bodyDiference),stateCmp.getJSONArray("bodies").getJSONObject(bodyDiference), steps); 
+				}
 			}
 		}
 		
