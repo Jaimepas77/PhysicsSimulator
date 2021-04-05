@@ -9,8 +9,7 @@ public class NoForceBuilder extends Builder<ForceLaws>{
 
 	
 	public NoForceBuilder() {
-		super("nf",
-			  "No Force");
+		super("nf", "No Force");
 	}
 	
 	@Override

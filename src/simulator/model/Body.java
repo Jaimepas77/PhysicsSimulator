@@ -7,7 +7,6 @@ import simulator.misc.Vector2D;
 public class Body {
 	
 	//Atributos
-	
 	protected String id; //Identificador de cuerpo
 	protected Vector2D velocity;//Vector de Velocidad
 	protected Vector2D force; //Vector de Fuerza
@@ -42,14 +41,6 @@ public class Body {
 	}
 	
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-	
-	@Override
 	public boolean equals(Object obj){
 		Body other = (Body)obj;
 		return this.id == other.id;
@@ -61,27 +52,25 @@ public class Body {
 	}
 	
 	protected void resetForce() {
-		force = new Vector2D(0,0);//Podemos poner tambien Vector2D() para el mismo efecto,
+		force = new Vector2D(0, 0);//Podemos poner tambien Vector2D() para el mismo efecto,
 	}
 	
-	protected void move(double t) { //Importante a ser revisado
+	protected void move(double t) {
 		Vector2D a; //Vector aceleracion
 		if(mass != 0) {
-			a = force.scale(1.0/mass); // Multiplicamos para dividir .
+			a = force.scale(1.0/mass);
 		}
 		else {
-			a = new Vector2D(0,0);
+			a = new Vector2D(0, 0);
 		}
 		
 		//Formulas
-		position = position.plus(velocity.scale(t).plus(a.scale(0.5 * t * t)) );//Interpreto que v, se refiere a Vini.
+		position = position.plus(velocity.scale(t).plus(a.scale(0.5 * t * t)) );
 		velocity = velocity.plus(a.scale(t));
 	}
 	
 	public JSONObject getState() {
 		
-		//Viendo Create Example de JSONObject
-		// build a JSONObject from a string en este caso es complicado
 		JSONObject js = new JSONObject();
 		js.put("id", id);
 		js.put("m", mass);
@@ -94,7 +83,6 @@ public class Body {
 	
 	public String toString() {
 		return getState().toString();
-		
 	}
 
 }

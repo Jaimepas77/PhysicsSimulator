@@ -9,16 +9,15 @@ public class NewtonUniversalGravitation implements ForceLaws {
 	//Constante gravitatoria autodefinida
 	private double G;
 	
-	
 	public NewtonUniversalGravitation(double G) {
 		//Se define la constante gravitaria
 		this.G = G;
-		
 	}
-	public void apply(List<Body> bs) {
+	
+	public void apply(List<Body> bodies) {
 		
-		for(Body bodyi : bs) {//Cuerpo Bi, quien "aplicado" la fuerca
-			for(Body bodyj : bs)//Cuerpos Bj , quienes "aplican" la fuerza
+		for(Body bodyi : bodies) {
+			for(Body bodyj : bodies)
 			{
 				//Sumatorio
 				if(bodyi != bodyj) {//Si no es el mismo
@@ -30,18 +29,14 @@ public class NewtonUniversalGravitation implements ForceLaws {
 	}
 	
 	private Vector2D force(Body a, Body b) {
-		/*double force = G * a.getMass() * b.getMass() / Math.pow(b.getPosition().distanceTo(a.getPosition()), 2); //Fuerza
-		Vector2D dir = b.getPosition().minus(a.getPosition());//calcular la dirección de (pj - pi) 
-		dir = dir.direction();
-		Vector2D f = dir.scale(force);//Vector de fuerza
-		return f;*/
+		
 		Vector2D delta = b.getPosition().minus(a.getPosition());
 	    double dist = delta.magnitude();
-	    double magnitude = dist>0 ? (G * a.getMass() * b.getMass()) / (dist * dist) : 0.0;
+	    double magnitude = dist > 0 ? (G * a.getMass() * b.getMass()) / (dist * dist) : 0.0;
 	    return delta.direction().scale(magnitude);
 	}
 	
-	public String toSring() { //Actual desconoce el uso
+	public String toSring() {//No hace nada
 		return null;
 	}
 	

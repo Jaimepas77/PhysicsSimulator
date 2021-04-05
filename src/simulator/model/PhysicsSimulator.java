@@ -9,8 +9,8 @@ import org.json.JSONObject;
 public class PhysicsSimulator {
 	private double stepTime; //Tiempo real por paso
 	private ForceLaws law; //Ley gravitacional a aplicar
-	private List<Body> bodies; //Lista de cuerpos existentes en la simulación
-	private double actualTime; //Momento de la simulación en el que nos encontramos
+	private List<Body> bodies; //Lista de cuerpos existentes en la simulacion
+	private double actualTime; //Momento de la simulacion en el que nos encontramos
 	
 	//Constructor
 	public PhysicsSimulator(double realTime, ForceLaws law)
@@ -18,19 +18,19 @@ public class PhysicsSimulator {
 		if(realTime > 0.0)
 			this.stepTime = realTime;
 		else
-			throw new IllegalArgumentException("Tiempo no válido.");
+			throw new IllegalArgumentException("Tiempo no valido.");
 		
 		if(law != null)
 			this.law = law;
 		else
-			throw new IllegalArgumentException("Ley de fuerza no válida.");
+			throw new IllegalArgumentException("Ley de fuerza no valida.");
 		
 		actualTime = 0.0;
 		
 		bodies = new ArrayList<>();
 	}
 	
-	//Métodos
+	//Metodos
 	public void advance()
 	{
 		for(Body x : bodies)

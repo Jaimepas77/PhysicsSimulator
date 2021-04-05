@@ -10,8 +10,7 @@ public class MassLossingBodyBuilder extends Builder<Body> {
 
 	
 	public MassLossingBodyBuilder(){
-		super("mlb",
-				"Mass Losing Body");
+		super("mlb", "Mass Losing Body");
 	}
 	@Override
 	protected Body createTheInstance(JSONObject data) {
@@ -27,12 +26,12 @@ public class MassLossingBodyBuilder extends Builder<Body> {
 	protected JSONObject createData() {
 		JSONObject data = new JSONObject();
 		//Plantilla
-		Vector2D p = new Vector2D(-3.5e10,0.0e00);
-		Vector2D v = new Vector2D(0.0e00,1.4e03);
+		Vector2D p = new Vector2D(-3.5e10, 0.0e00);
+		Vector2D v = new Vector2D(0.0e00, 1.4e03);
 		data.put("id", "b1");
 		data.put("p", p.asJSONArray());
 		data.put("v", v.asJSONArray());
-		data.put("m", 3.0e28);//5.97e24 es para el BasicBody
+		data.put("m", 3.0e28);
 		data.put("freq", 1e3);
 		data.put("factor", 1e-3);
 		return data;

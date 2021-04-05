@@ -12,15 +12,12 @@ public class MovingTowardsFixedPointBuilder  extends Builder<ForceLaws> {
 	public static final double G = 9.81;
 	
 	public MovingTowardsFixedPointBuilder() {
-		super("mtfp",
-			  "Moving a Fixed Point");
+		super("mtfp", "Moving a Fixed Point");
 	}
 
 	@Override
 	protected ForceLaws createTheInstance(JSONObject data) {
 		
-		//Aqui se intrepreta que "constructor" se define el valor por defector y no clase la define.
-		//Y asi bastaria un constructor de clase , que es la estandar.
 		double g = data.has("g") ? data.getDouble("g") : G;
 		Vector2D c;
 		
@@ -34,9 +31,9 @@ public class MovingTowardsFixedPointBuilder  extends Builder<ForceLaws> {
 
 	protected JSONObject createData() {
 		JSONObject data = new JSONObject();
-		Vector2D c = new Vector2D(0,0);
+		Vector2D c = new Vector2D(0, 0);
 		data.put("c", c.asJSONArray());
-		data.put("g", 9.81);
+		data.put("g", G);
 		return data;
 	}
 }

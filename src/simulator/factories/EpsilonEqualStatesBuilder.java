@@ -11,9 +11,9 @@ public class EpsilonEqualStatesBuilder extends Builder<StateComparator> {
 	public static final double EPSILON = 0.0;
 	
 	public  EpsilonEqualStatesBuilder(){
-		super("epseq",
-			 "Epsilon Equal Comparator");
+		super("epseq", "Epsilon Equal Comparator");
 	}
+	
 	@Override
 	protected StateComparator createTheInstance(JSONObject data) {
 		if(data.has("eps")){
@@ -24,7 +24,7 @@ public class EpsilonEqualStatesBuilder extends Builder<StateComparator> {
 	
 	protected JSONObject createData() {
 		JSONObject data = new JSONObject();
-		data.put("eps",0.0);
+		data.put("eps", 0.0);
 		return data;
 		
 	}

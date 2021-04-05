@@ -11,10 +11,10 @@ public class BuilderBasedFactory<T> implements Factory<T> {
 	private List<JSONObject> factoryElem;//Lista de JSONObject (plantillas con valores por defectos)
 	
 	public BuilderBasedFactory(List <Builder<T>> builders) {
-		listBuilder = new ArrayList<>(builders); //Invoca construtor por copia
+		listBuilder = new ArrayList<Builder<T>>(builders);
 		
-		factoryElem = new ArrayList<>();//Inicializar la lista de objetos JSON
-		for(Builder<T> b : listBuilder) {//Introduce los valores
+		factoryElem = new ArrayList<JSONObject>();
+		for(Builder<T> b : listBuilder) {
 			factoryElem.add(b.getBuilderInfo());
 		}
 	}

@@ -49,18 +49,18 @@ public class Main {
 	private static Factory<StateComparator> _stateComparatorFactory;
 
 	private static void init() {
-		// TODO initialize the bodies factory
+		// initialize the bodies factory
 			ArrayList<Builder<Body>> bodyBuilders = new ArrayList<>();
 			bodyBuilders.add(new BasicBodyBuilder());
 			bodyBuilders.add(new MassLossingBodyBuilder());
 			_bodyFactory = new BuilderBasedFactory<Body>(bodyBuilders);
-		// TODO initialize the force laws factory
+		// initialize the force laws factory
 			ArrayList<Builder<ForceLaws>> forceLawsBuilders = new ArrayList<>();
 			forceLawsBuilders.add(new NewtonUniversalGravitationBuilder());
 			forceLawsBuilders.add(new MovingTowardsFixedPointBuilder());
 			forceLawsBuilders.add(new NoForceBuilder());
 			_forceLawsFactory = new BuilderBasedFactory<ForceLaws>(forceLawsBuilders);
-		// TODO initialize the state comparator
+		// initialize the state comparator
 			ArrayList<Builder<StateComparator>> stateComparatorBuilders = new ArrayList<>();
 			stateComparatorBuilders.add(new MassEqualStatesBuilder());
 			stateComparatorBuilders.add(new EpsilonEqualStatesBuilder());
@@ -81,7 +81,7 @@ public class Main {
 
 			parseHelpOption(line, cmdLineOptions);
 			parseInFileOption(line);
-			// TODO add support of -o, -eo, and -s (define corresponding parse methods)
+			// add support of -o, -eo, and -s (define corresponding parse methods)
 			parseOutFileOption(line);//-o
 			parseExpectedOutPutFileOption(line);//-eo
 			parseStepOption(line);//-s
@@ -118,7 +118,7 @@ public class Main {
 		// input file
 		cmdLineOptions.addOption(Option.builder("i").longOpt("input").hasArg().desc("Bodies JSON input file.").build());
 
-		// TODO add support for -o, -eo, and -s (add corresponding information to cmdLineOptions)
+		// add support for -o, -eo, and -s (add corresponding information to cmdLineOptions)
 		
 		// out file 
 		cmdLineOptions.addOption(Option.builder("o").longOpt("output").hasArg().desc("Define out put file").build());
@@ -195,8 +195,8 @@ public class Main {
 		}
 	}
 	
-	private static void parseStepOption(CommandLine line) throws ParseException {//Revisar
-		String ds = line.getOptionValue("s",_defaultStep.toString());//Para caso de que lanza una exception
+	private static void parseStepOption(CommandLine line) throws ParseException {
+		String ds = line.getOptionValue("s", _defaultStep.toString());
 		try {
 			_step = Integer.parseInt(ds);
 		}
@@ -206,11 +206,11 @@ public class Main {
 		
 	}
 
-	private static void parseExpectedOutPutFileOption(CommandLine line) {//Revisar
+	private static void parseExpectedOutPutFileOption(CommandLine line) {
 		_expOutFile = line.getOptionValue("eo");//Se compararia si es null en startBatchMode()
 	}
 
-	private static void parseOutFileOption(CommandLine line) {//Revisar
+	private static void parseOutFileOption(CommandLine line) {
 		_outFile  = line.getOptionValue("o");//Se compararia si es null en startBatchMode()
 		
 	}
@@ -270,13 +270,13 @@ public class Main {
 	}
 
 	private static void startBatchMode() throws Exception {
-		// TODO complete this method
+		// complete this method
 		InputStream is = new FileInputStream(new File(_inFile));
 		OutputStream os = _outFile == null ? 
 				System.out : new FileOutputStream(new File(_outFile));
 		
 		//Crear el simulator
-		PhysicsSimulator simulator = new PhysicsSimulator(_dtime, _forceLawsFactory.createInstance(_forceLawsInfo));//Revisable
+		PhysicsSimulator simulator = new PhysicsSimulator(_dtime, _forceLawsFactory.createInstance(_forceLawsInfo));
 		Controller controller = new Controller(simulator, _bodyFactory);
 		
 		InputStream expOut = null;
