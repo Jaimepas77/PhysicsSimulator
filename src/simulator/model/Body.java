@@ -43,7 +43,7 @@ public class Body {
 	@Override
 	public boolean equals(Object obj){
 		Body other = (Body)obj;
-		return this.id == other.id;
+		return this.id.equals(other.id);
 	}
 	
 	//Metodos a implementar
