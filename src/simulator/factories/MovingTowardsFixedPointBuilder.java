@@ -8,6 +8,9 @@ import simulator.model.MovingTowardsFixedPoint;
 
 public class MovingTowardsFixedPointBuilder  extends Builder<ForceLaws> {
 
+	//Valores por defecto
+	public static final double G = 9.81;
+	
 	public MovingTowardsFixedPointBuilder() {
 		super("mtfp",
 			  "Moving a Fixed Point");
@@ -18,7 +21,7 @@ public class MovingTowardsFixedPointBuilder  extends Builder<ForceLaws> {
 		
 		//Aqui se intrepreta que "constructor" se define el valor por defector y no clase la define.
 		//Y asi bastaria un constructor de clase , que es la estandar.
-		double g = data.has("g") ? data.getDouble("g") : 9.81;
+		double g = data.has("g") ? data.getDouble("g") : G;
 		Vector2D c;
 		
 		if(data.has("c")){

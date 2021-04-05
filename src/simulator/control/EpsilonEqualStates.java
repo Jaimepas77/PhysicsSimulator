@@ -9,10 +9,6 @@ public class EpsilonEqualStates implements StateComparator {
 	
 	private double eps;
 
-	public EpsilonEqualStates(){
-		this.eps = 0;
-	}
-	
 	public EpsilonEqualStates(double eps){
 		this.eps = eps; 
 	}
