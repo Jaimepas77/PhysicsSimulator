@@ -50,15 +50,14 @@ public class Controller {
 		JSONObject stateIni = simulator.getState();//Salida inicial obtenida
 		p.println(stateIni);
 		
-		JSONObject stateCmp = new JSONObject();//Estado esperdo
+		JSONObject stateCmp = new JSONObject();//Estado esperado
 		
 		if(JSONCmpS != null) {
 			stateCmp = JSONCmpS.getJSONArray("states").getJSONObject(0);//Salida inicial esperada
 			
 			if(!cmp.equal(stateIni, stateCmp)) {//si la salida no es la esperada...
-				int bodyDiference = positionFirstBodyDiference(stateIni, stateCmp, cmp);
 				//Lanzar expecion que sirve para las pruebas
-				throw new NotEqualStatesException(stateIni, stateCmp, stateIni.getJSONArray("bodies").getJSONObject(bodyDiference), stateCmp.getJSONArray("bodies").getJSONObject(bodyDiference), steps); 
+				throw new NotEqualStatesException(stateIni, stateCmp, steps); 
 			}
 		}
 	
@@ -66,6 +65,7 @@ public class Controller {
 		for(int i = 1; i <= steps ; i++) {
 			simulator.advance();
 			
+			p.print(",");
 			JSONObject stateAct = simulator.getState();//Salida actual
 			p.println(stateAct);
 			
@@ -73,9 +73,7 @@ public class Controller {
 				stateCmp = JSONCmpS.getJSONArray("states").getJSONObject(i);//Se actualiza la salida esperada en el paso actual
 				
 				if(!cmp.equal(stateAct, stateCmp)) {
-					int bodyDiference = positionFirstBodyDiference(stateAct, stateCmp, cmp);
-					
-					throw new NotEqualStatesException(stateAct, stateCmp, stateAct.getJSONArray("bodies").getJSONObject(bodyDiference), stateCmp.getJSONArray("bodies").getJSONObject(bodyDiference), steps); 
+					throw new NotEqualStatesException(stateAct, stateCmp, steps); 
 				}
 			}
 		}
@@ -84,37 +82,5 @@ public class Controller {
 		p.println("}");
 	
 	}
-	
-	private int positionFirstBodyDiference(JSONObject stateAct, JSONObject stateCmp, StateComparator cmp) {
-		int j = 0;
-		while(j < stateAct.getJSONArray("bodies").length()) {//Ambos debe tener el mismo numero de cuerpos
-			//Body que tenemos (un)
-			JSONArray actBodies = new JSONArray();
-			actBodies.put(stateAct.getJSONArray("bodies").get(j));
-			
-			//Body esperado (un)
-			JSONArray expectedBodies = new JSONArray();
-			expectedBodies.put(stateCmp.getJSONArray("bodies").get(j));
-			
-			//Pasamos a JSONObject para poder usar comparatores
-			JSONObject stateActAux = new JSONObject();
-			stateActAux.put("bodies", actBodies);
-			stateActAux.put("time", stateAct.getDouble("time"));
-			
-			JSONObject stateCmpAux = new JSONObject();
-			stateCmpAux.put("bodies", expectedBodies);
-			stateCmpAux.put("time", stateCmp.getDouble("time"));
-			
-			if(!cmp.equal(stateActAux, stateCmpAux)) {//Se compara los cuerpos uno a uno
-				return j;
-			}
-			else {
-				j++;
-			}
-		}
-		return 0;//No siempre la desigualdad se debe a los cuerpos
-		
-	}
-	
 	
 }
