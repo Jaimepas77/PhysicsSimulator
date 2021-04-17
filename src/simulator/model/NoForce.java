@@ -10,7 +10,8 @@ public class NoForce implements ForceLaws {
 		//Los cuerpos se mueven con una aceleracion fija
 	}
 	
-	public String toSring() {//No hace nada
-		return null;
+	@Override
+	public String toString() {
+		return "No Force";
 	}
 }

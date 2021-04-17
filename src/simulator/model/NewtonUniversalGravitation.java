@@ -36,8 +36,9 @@ public class NewtonUniversalGravitation implements ForceLaws {
 	    return delta.direction().scale(magnitude);
 	}
 	
-	public String toSring() {//No hace nada
-		return null;
+	@Override
+	public String toString() {
+		return "Newton's Universal Gravitation with G-" + G;
 	}
 	
 }

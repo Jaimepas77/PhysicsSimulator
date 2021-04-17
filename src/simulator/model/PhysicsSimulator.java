@@ -15,15 +15,9 @@ public class PhysicsSimulator {
 	//Constructor
 	public PhysicsSimulator(double realTime, ForceLaws law)
 	{
-		if(realTime > 0.0)
-			this.stepTime = realTime;
-		else
-			throw new IllegalArgumentException("Tiempo no valido.");
+		setStepTime(realTime); //Reutilizando el codigo
 		
-		if(law != null)
-			this.law = law;
-		else
-			throw new IllegalArgumentException("Ley de fuerza no valida.");
+		setLaw(law);
 		
 		actualTime = 0.0;
 		
@@ -68,6 +62,25 @@ public class PhysicsSimulator {
 	public String toString()
 	{
 		return getState().toString();
+	}
+	
+	public void reset() {
+		actualTime = 0.0;
+		bodies.clear();//Vaciar la lista
+	}
+	
+	public void setStepTime(double dt) {//Cambia el tiempo real por paso
+		if(dt > 0.0)
+			this.stepTime = dt;
+		else
+			throw new IllegalArgumentException("Tiempo no valido.");
+	}
+	
+	public void setLaw(ForceLaws forceLaws) {//Cambia la ley gravitacional
+		if(forceLaws != null)
+			this.law = forceLaws;
+		else
+			throw new IllegalArgumentException("Ley de fuerza no valida.");
 	}
 }
 

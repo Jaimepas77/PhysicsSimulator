@@ -20,5 +20,10 @@ public class MovingTowardsFixedPoint implements ForceLaws {
 			body.addForce(centerOfUniverse.minus(body.getPosition()).direction().scale(gDef * body.getMass()) );
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return "Moving towards-" + centerOfUniverse + " with constant acceleration-" + gDef;
+	}
 
 }

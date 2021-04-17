@@ -31,9 +31,8 @@ public class MovingTowardsFixedPointBuilder  extends Builder<ForceLaws> {
 
 	protected JSONObject createData() {
 		JSONObject data = new JSONObject();
-		Vector2D c = new Vector2D(0, 0);
-		data.put("c", c.asJSONArray());
-		data.put("g", G);
+		data.put("c", "the point towards which bodies move(a json list of 2 numbers , e.g., [100.0,50.0])");
+		data.put("g", "the length of the acceleration vector (a number)");
 		return data;
 	}
 }
