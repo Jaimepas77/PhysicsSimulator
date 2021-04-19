@@ -11,6 +11,7 @@ public class PhysicsSimulator {
 	private ForceLaws law; //Ley gravitacional a aplicar
 	private List<Body> bodies; //Lista de cuerpos existentes en la simulacion
 	private double actualTime; //Momento de la simulacion en el que nos encontramos
+	private List<SimulatorObserver> observers;//Lista de observadores
 	
 	//Constructor
 	public PhysicsSimulator(double realTime, ForceLaws law)
@@ -22,6 +23,8 @@ public class PhysicsSimulator {
 		actualTime = 0.0;
 		
 		bodies = new ArrayList<>();
+		
+		observers = new ArrayList<>();
 	}
 	
 	//Metodos
@@ -36,6 +39,11 @@ public class PhysicsSimulator {
 			x.move(stepTime);
 		
 		actualTime += stepTime;
+		
+		for(SimulatorObserver so : observers) //Se envia a todos los observadores
+		{
+			so.onAdvance(bodies, actualTime);;
+		}
 	}
 	
 	public void addBody(Body b)
@@ -43,6 +51,21 @@ public class PhysicsSimulator {
 		if(bodies.contains(b))
 				throw new IllegalArgumentException("El cuerpo ya existe.");
 		bodies.add(b);
+		
+		for(SimulatorObserver so : observers) //Se envia a todos los observadores
+		{
+			so.onBodyAdded(bodies, b);
+		}
+	}
+	
+	public void addObserver(SimulatorObserver so)
+	{
+		if(observers.contains(so))
+		{
+			throw new IllegalArgumentException("El observador ya existe.");
+		}
+		observers.add(so);
+		observers.get(observers.size()-1).onRegister(bodies, actualTime, stepTime, law.toString());//Se enviar al observador que acabamos de aniadir
 	}
 	
 	public JSONObject getState()
@@ -67,18 +90,37 @@ public class PhysicsSimulator {
 	public void reset() {
 		actualTime = 0.0;
 		bodies.clear();//Vaciar la lista
+		
+		for(SimulatorObserver so : observers) //Se envia a todos los observadores
+		{
+			so.onReset(bodies, actualTime, stepTime, law.toString());
+		}
 	}
 	
-	public void setStepTime(double dt) {//Cambia el tiempo real por paso
+	public void setStepTime(double dt)//Cambia el tiempo real por paso
+	{
 		if(dt > 0.0)
+		{
 			this.stepTime = dt;
-		else
+			for (SimulatorObserver so : observers) // Se envia a todos los observadores
+			{
+				so.onDeltaTimeChanged(stepTime);
+			}
+		} else
 			throw new IllegalArgumentException("Tiempo no valido.");
+		
 	}
 	
-	public void setLaw(ForceLaws forceLaws) {//Cambia la ley gravitacional
-		if(forceLaws != null)
+	public void setLaw(ForceLaws forceLaws)//Cambia la ley gravitacional
+	{
+		if(forceLaws != null) 
+		{
 			this.law = forceLaws;
+			for(SimulatorObserver so : observers) //Se envia a todos los observadores
+			{
+				so.onForceLawsChanged(law.toString());
+			}
+		}
 		else
 			throw new IllegalArgumentException("Ley de fuerza no valida.");
 	}

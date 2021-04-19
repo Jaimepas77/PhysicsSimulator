@@ -277,7 +277,7 @@ public class Main {
 		
 		//Crear el simulator
 		PhysicsSimulator simulator = new PhysicsSimulator(_dtime, _forceLawsFactory.createInstance(_forceLawsInfo));
-		Controller controller = new Controller(simulator, _bodyFactory);
+		Controller controller = new Controller(simulator, _bodyFactory,_forceLawsFactory);
 		
 		InputStream expOut = null;
 		

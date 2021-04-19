@@ -1,8 +1,10 @@
 package simulator.control;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,16 +13,20 @@ import org.json.JSONTokener;
 
 import simulator.factories.Factory;
 import simulator.model.Body;
+import simulator.model.ForceLaws;
 import simulator.model.PhysicsSimulator;
+import simulator.model.SimulatorObserver;
 
 public class Controller {
 	
 	private PhysicsSimulator simulator;
 	private Factory<Body> bodyFactory;
+	private Factory<ForceLaws> forceLawsFactory;
 	
-	public Controller(PhysicsSimulator simulator, Factory<Body> bodyFactory) {
+	public Controller(PhysicsSimulator simulator, Factory<Body> bodyFactory ,Factory<ForceLaws> forceLawsFactory) {
 		this.simulator = simulator;
 		this.bodyFactory = bodyFactory;
+		this.forceLawsFactory = forceLawsFactory;
 	}
 
 	public void loadBodies(InputStream in) {//Iniciar los cuerpos 
@@ -34,8 +40,32 @@ public class Controller {
 		
 	}
 	
+	public void setStepTime(double dt) {
+		simulator.setStepTime(dt);
+	}
+	
+	public void setForceLaws(JSONObject info) {
+		ForceLaws law = forceLawsFactory.createInstance(info);//Se crea una nueva ley con info
+		simulator.setLaw(law);
+	}
+	
+	public void addObserver(SimulatorObserver so) {
+		simulator.addObserver(so);
+	}
+	
+	public List<JSONObject>getForceLawsInfo(){
+		return forceLawsFactory.getInfo();
+	}
+	
 	public void run(int steps, OutputStream out, InputStream expOut, StateComparator cmp) throws JSONException, NotEqualStatesException  {//Ejecuta el simulador n veces, comparando el estado con lo esperado cada vez. 
 		
+		new OutputStream() {
+			@Override
+			public void write(int b) throws IOException {
+				//No escribimos nada en la consola.......
+			};
+		};
+
 		JSONObject JSONCmpS = null;//Para comparar nuestro salida con los esperados
 		PrintStream p = new PrintStream(out);//Salida
 		
