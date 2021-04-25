@@ -40,6 +40,10 @@ public class Controller {
 		
 	}
 	
+	public void reset() {
+		simulator.reset();
+	}
+	
 	public void setStepTime(double dt) {
 		simulator.setStepTime(dt);
 	}
