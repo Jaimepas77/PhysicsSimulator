@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.Label;
@@ -37,6 +38,9 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	private JButton pauseButton;
 	private JButton runButton;
 	private JButton exitButton;
+	
+	//ToolBar
+	private JToolBar toolBar;
 
 	
 	ControlPanel(Controller controller){
@@ -54,15 +58,34 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
-		intFileButton();
 		
-		initLawConfButton();//TODO
+		toolBar = new JToolBar();
 		
-		initPauseButton();
+		intFileButton();//ToDo
+		toolBar.add(fileButton);
+		toolBar.addSeparator();
 		
-		initRunButton();
+		initLawConfButton();//ToDo
+		toolBar.add(lawConfButton);
+		
+		initPauseButton();//ToDo
+		toolBar.add(pauseButton);
+		toolBar.addSeparator();
+		
+		initRunButton();//ToDo
+		toolBar.addSeparator();
 		
 		initExitButton();
+		toolBar.add(Box.createGlue());//Pegamento
+		toolBar.addSeparator();
+		toolBar.add(exitButton);
+		
+		this.add(toolBar);
+		
+		
+		
+	
+		
 		
 	}
 	
@@ -90,7 +113,6 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 			}
 		}
 		);
-		this.add(fileButton);
 	}
 	
 	private void initLawConfButton() {
@@ -118,7 +140,6 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 					
 			}
 		);
-		this.add(lawConfButton);
 	}
 	
 	private void initPauseButton() {
@@ -131,19 +152,18 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 			}
 		}
 		);
-		this.add(pauseButton);
 	}
 	
 	private void initRunButton() {
 		JLabel stepLabel= new JLabel("step:");
-		JSpinner step = new JSpinner();
+		JSpinner step = new JSpinner();//Step relacionado
 		
 		runButton  = new JButton(new ImageIcon("resources/icons/run.png"));
 		runButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				fileButton.setEnabled(false);
+				fileButton.setEnabled(false);//Desactivar todas los botones
 				lawConfButton.setEnabled(false);
 				exitButton.setEnabled(false);
 				stopped = false;
@@ -151,20 +171,25 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 			}
 			
 		});
-		this.add(runButton);
-		
-		this.add(stepLabel);
-		this.add(step);
+		toolBar.add(runButton);
 		
 		JLabel delta= new JLabel("Delta-tiem:");
 		JTextField deltaTime = new JTextField();
+		
+		toolBar.add(stepLabel);
+		toolBar.add(step);
+		
+		deltaTime.setColumns(4);
+		deltaTime.setMaximumSize(deltaTime.getPreferredSize());//Para que mantenga una distacia con exitButton
 		deltaTime.setText(dt + "");
-		this.add(delta);
-		this.add(deltaTime);
+		
+		toolBar.add(delta);
+		toolBar.add(deltaTime);
 	}
 	
 	private void initExitButton() {
 		exitButton = new JButton(new ImageIcon("resources/icons/exit.png"));
+
 		exitButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -176,7 +201,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 			}
 			
 		});
-		this.add(exitButton);
+		
 	}
 	
 	private void run_sim(int n) {
