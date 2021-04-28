@@ -3,6 +3,7 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
@@ -41,6 +42,12 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	
 	//ToolBar
 	private JToolBar toolBar;
+	
+	//Spinner
+	private JSpinner step;
+	
+	//
+	JTextField text_time;
 
 	
 	ControlPanel(Controller controller){
@@ -54,38 +61,44 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	}
 
 	private void initGUI() {
-		// TODO Auto-generated method stub
 		
-		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		
+		this.setLayout(new BorderLayout());
 		
 		toolBar = new JToolBar();
-		
+		//
 		intFileButton();//ToDo
 		toolBar.add(fileButton);
 		toolBar.addSeparator();
-		
+		//
 		initLawConfButton();//ToDo
 		toolBar.add(lawConfButton);
-		
+		//
 		initPauseButton();//ToDo
 		toolBar.add(pauseButton);
 		toolBar.addSeparator();
-		
+		//
 		initRunButton();//ToDo
+		toolBar.add(runButton);
+		JLabel stepLabel= new JLabel("step:");
+		toolBar.add(stepLabel);
+		toolBar.add(step);
+		step.setMaximumSize(new Dimension(512,124));//Posiblemente existe manera mejor
 		toolBar.addSeparator();
-		
+		//
+		JLabel delta= new JLabel("Delta-tiem:");
+		text_time = new JTextField();
+		text_time.setColumns(4);
+		text_time.setMaximumSize(text_time.getPreferredSize());//Para que mantenga una distacia con exitButton
+		text_time.setText(dt + "");
+		toolBar.add(delta);
+		toolBar.add(text_time);
+		//
 		initExitButton();
 		toolBar.add(Box.createGlue());//Pegamento
 		toolBar.addSeparator();
 		toolBar.add(exitButton);
 		
-		this.add(toolBar);
-		
-		
-		
-	
-		
+		this.add(toolBar,BorderLayout.PAGE_START);
 		
 	}
 	
@@ -155,8 +168,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	}
 	
 	private void initRunButton() {
-		JLabel stepLabel= new JLabel("step:");
-		JSpinner step = new JSpinner();//Step relacionado
+		step = new JSpinner();//Step relacionado
 		
 		runButton  = new JButton(new ImageIcon("resources/icons/run.png"));
 		runButton.addActionListener(new ActionListener() {
@@ -171,20 +183,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 			}
 			
 		});
-		toolBar.add(runButton);
 		
-		JLabel delta= new JLabel("Delta-tiem:");
-		JTextField deltaTime = new JTextField();
-		
-		toolBar.add(stepLabel);
-		toolBar.add(step);
-		
-		deltaTime.setColumns(4);
-		deltaTime.setMaximumSize(deltaTime.getPreferredSize());//Para que mantenga una distacia con exitButton
-		deltaTime.setText(dt + "");
-		
-		toolBar.add(delta);
-		toolBar.add(deltaTime);
 	}
 	
 	private void initExitButton() {
@@ -268,6 +267,8 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		j.setLayout(new BorderLayout());
 		ControlPanel p = new ControlPanel();//No funcionaria la parte que necesita controller
 		j.add(p,BorderLayout.NORTH);
+		
+		j.pack();
 		j.setVisible(true);
 	}
 
