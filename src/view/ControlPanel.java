@@ -31,7 +31,8 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	private Controller controller;
 	private boolean stopped;
 	
-	private double dt ;
+	//Observador
+	private double realTime;
 	
 	//Buttons
 	private JButton fileButton;
@@ -43,10 +44,10 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	//ToolBar
 	private JToolBar toolBar;
 	
-	//Spinner
+	//Spinner & observador
 	private JSpinner step;
 	
-	//
+	
 	JTextField text_time;
 
 	
@@ -73,23 +74,27 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		initLawConfButton();//ToDo
 		toolBar.add(lawConfButton);
 		//
-		initPauseButton();//ToDo
+		initPauseButton();
 		toolBar.add(pauseButton);
 		toolBar.addSeparator();
+		//Spinner
+		step = new JSpinner(new SpinnerNumberModel(10, 1, 100000, 1));//Al JUGAR
+		step.setMaximumSize(new Dimension(80, 40));
+		step.setPreferredSize(new Dimension(80, 40));
 		//
 		initRunButton();//ToDo
 		toolBar.add(runButton);
 		JLabel stepLabel= new JLabel("step:");
 		toolBar.add(stepLabel);
 		toolBar.add(step);
-		step.setMaximumSize(new Dimension(512,124));//Posiblemente existe manera mejor
+		
 		toolBar.addSeparator();
 		//
 		JLabel delta= new JLabel("Delta-tiem:");
 		text_time = new JTextField();
 		text_time.setColumns(4);
 		text_time.setMaximumSize(text_time.getPreferredSize());//Para que mantenga una distacia con exitButton
-		text_time.setText(dt + "");
+		text_time.setText(realTime + "");
 		toolBar.add(delta);
 		toolBar.add(text_time);
 		//
@@ -116,7 +121,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 					File file = fileChooser.getSelectedFile();
 					try {
 						InputStream is = new FileInputStream(file);
-						controller.reset();//ERROR......
+						controller.reset();//ERROR si el archivo no es deseado no?
 						controller.loadBodies(is);
 					} catch (FileNotFoundException e1) {
 						e1.printStackTrace();
@@ -133,16 +138,10 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		lawConfButton = new JButton(new ImageIcon("resources/icons/physics.png"));//Ambas formas vadria
 		lawConfButton.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {//Hay que usar table.
 				//controller.setForceLaws(info);
 		
 				JComboBox comboBox= new JComboBox(); 
-				
-				JPanel central = new JPanel();
-				central.setLayout(new GridLayout());
-				central.add(new Label("des"));
-				central.add(new Label("values"));
-				
 				List<JSONObject> laws = controller.getForceLawsInfo();
 				
 				for(JSONObject o : laws) {
@@ -168,8 +167,6 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	}
 	
 	private void initRunButton() {
-		step = new JSpinner();//Step relacionado
-		
 		runButton  = new JButton(new ImageIcon("resources/icons/run.png"));
 		runButton.addActionListener(new ActionListener() {
 
@@ -210,64 +207,77 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		} catch (Exception e) {
 			// TODO show the error in a dialog box
 			// TODO enable all buttons
+			allButtonEnable();
 			stopped = true;
-		return;
 		}
 		SwingUtilities.invokeLater( new Runnable() {
 			@Override
 			public void run() {
-			run_sim(n-1);
+				run_sim(n-1);
 			}
 		});
 		} else {
 			stopped = true;
 			// TODO enable all buttons
+			allButtonEnable();
 		}
 	}
 
 
 	@Override
 	public void onRegister(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		// TODO Auto-generated method stub
-		
+		updateTime(time);
+		updateStep(dt);
 	}
 
 	@Override
 	public void onReset(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		// TODO Auto-generated method stub
-		
+		updateTime(time);
+		updateStep(dt);
 	}
 
 	@Override
 	public void onBodyAdded(List<Body> bodies, Body b) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onAdvance(List<Body> bodies, double time) {
-		// TODO Auto-generated method stub
-		
+		updateTime(time);
 	}
 
 	@Override
 	public void onDeltaTimeChanged(double dt) {
-		// TODO Auto-generated method stub
-		
+		updateStep(dt);
 	}
 
 	@Override
 	public void onForceLawsChanged(String fLawsDesc) {
-		// TODO Auto-generated method stub
-		
 	}
+	
+	private void updateStep(double dt) {
+		step.setValue(dt);
+	}
+	
+	private void updateTime(double time) {
+		this.realTime = time;
+		text_time.setText(realTime + "");
+	}
+	
+	private void allButtonEnable() {
+		// TODO enable all buttons
+		fileButton.setEnabled(true);
+		lawConfButton.setEnabled(true);
+		pauseButton.setEnabled(true);
+		runButton.setEnabled(true);
+		exitButton.setEnabled(true);
+	}
+	
 	public static void main(String[] args) {
 		
 		JFrame j = new JFrame("Prueba");
 		j.setLayout(new BorderLayout());
 		ControlPanel p = new ControlPanel();//No funcionaria la parte que necesita controller
 		j.add(p,BorderLayout.NORTH);
-		
 		j.pack();
 		j.setVisible(true);
 	}

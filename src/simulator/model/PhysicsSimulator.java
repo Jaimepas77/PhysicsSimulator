@@ -16,15 +16,16 @@ public class PhysicsSimulator {
 	//Constructor
 	public PhysicsSimulator(double realTime, ForceLaws law)
 	{
+		bodies = new ArrayList<>();
+		
+		observers = new ArrayList<>();
 		setStepTime(realTime); //Reutilizando el codigo
 		
 		setLaw(law);
 		
 		actualTime = 0.0;
 		
-		bodies = new ArrayList<>();
 		
-		observers = new ArrayList<>();
 	}
 	
 	//Metodos
