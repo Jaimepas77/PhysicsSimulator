@@ -23,7 +23,7 @@ public class MovingTowardsFixedPoint implements ForceLaws {
 	
 	@Override
 	public String toString() {
-		return "Moving towards-" + centerOfUniverse + " with constant acceleration-" + gDef;
+		return "Moving towards " + centerOfUniverse + " with constant acceleration " + gDef;
 	}
 
 }

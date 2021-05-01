@@ -7,7 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class PhysicsSimulator {
-	private double stepTime; //Tiempo real por paso
+	private double stepTime; //Tiempo real por paso (delta time)
 	private ForceLaws law; //Ley gravitacional a aplicar
 	private List<Body> bodies; //Lista de cuerpos existentes en la simulacion
 	private double actualTime; //Momento de la simulacion en el que nos encontramos
@@ -24,8 +24,6 @@ public class PhysicsSimulator {
 		setLaw(law);
 		
 		actualTime = 0.0;
-		
-		
 	}
 	
 	//Metodos
@@ -98,7 +96,7 @@ public class PhysicsSimulator {
 		}
 	}
 	
-	public void setStepTime(double dt)//Cambia el tiempo real por paso
+	public void setStepTime(double dt)//Cambia el tiempo real por paso (delta time)
 	{
 		if(dt > 0.0)
 		{
@@ -109,7 +107,6 @@ public class PhysicsSimulator {
 			}
 		} else
 			throw new IllegalArgumentException("Tiempo no valido.");
-		
 	}
 	
 	public void setLaw(ForceLaws forceLaws)//Cambia la ley gravitacional
