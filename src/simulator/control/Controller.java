@@ -23,7 +23,7 @@ public class Controller {
 	private Factory<Body> bodyFactory;
 	private Factory<ForceLaws> forceLawsFactory;
 	
-	public Controller(PhysicsSimulator simulator, Factory<Body> bodyFactory ,Factory<ForceLaws> forceLawsFactory) {
+	public Controller(PhysicsSimulator simulator, Factory<Body> bodyFactory, Factory<ForceLaws> forceLawsFactory) {
 		this.simulator = simulator;
 		this.bodyFactory = bodyFactory;
 		this.forceLawsFactory = forceLawsFactory;
@@ -32,19 +32,18 @@ public class Controller {
 	public void loadBodies(InputStream in) {//Iniciar los cuerpos 
 		JSONObject jsin = new JSONObject(new JSONTokener(in));//Convertir a JSONObject
 		
-		JSONArray bodies = jsin.getJSONArray("bodies");//Se supone lo que lleva es un JSONArryas cuyo elementos son JSONObject de bodies
+		JSONArray bodies = jsin.getJSONArray("bodies");//Se supone que lo que lleva es un JSONArrays cuyos elementos son JSONObjects de bodies.
 		
 		for(int i = 0; i< bodies.length(); i++) {
 			simulator.addBody(bodyFactory.createInstance(bodies.getJSONObject(i)));
 		}
-		
 	}
 	
 	public void reset() {
 		simulator.reset();
 	}
 	
-	public void setStepTime(double dt) {
+	public void setStepTime(double dt) {//setDeltaTime en el enunciado
 		simulator.setStepTime(dt);
 	}
 	
@@ -66,7 +65,7 @@ public class Controller {
 		new OutputStream() {
 			@Override
 			public void write(int b) throws IOException {
-				//No escribimos nada en la consola.......
+				//No escribimos nada en la consola...
 			};
 		};
 
@@ -90,7 +89,7 @@ public class Controller {
 			stateCmp = JSONCmpS.getJSONArray("states").getJSONObject(0);//Salida inicial esperada
 			
 			if(!cmp.equal(stateIni, stateCmp)) {//si la salida no es la esperada...
-				//Lanzar expecion que sirve para las pruebas
+				//Lanzar expepcion que sirve para las pruebas
 				throw new NotEqualStatesException(stateIni, stateCmp, steps); 
 			}
 		}

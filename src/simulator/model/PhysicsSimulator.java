@@ -63,8 +63,12 @@ public class PhysicsSimulator {
 		{
 			throw new IllegalArgumentException("El observador ya existe.");
 		}
-		observers.add(so);
-		observers.get(observers.size()-1).onRegister(bodies, actualTime, stepTime, law.toString());//Se enviar al observador que acabamos de aniadir
+		else
+		{
+			observers.add(so);
+			//observers.get(observers.size()-1).onRegister(bodies, actualTime, stepTime, law.toString());//Se envia al observador que acabamos de aniadir
+			so.onRegister(bodies, actualTime, stepTime, law.toString());//¿Esto no sería equivalente y más legible que la opción anterior?
+		}
 	}
 	
 	public JSONObject getState()
@@ -86,7 +90,8 @@ public class PhysicsSimulator {
 		return getState().toString();
 	}
 	
-	public void reset() {
+	public void reset() 
+	{
 		actualTime = 0.0;
 		bodies.clear();//Vaciar la lista
 		
@@ -105,8 +110,11 @@ public class PhysicsSimulator {
 			{
 				so.onDeltaTimeChanged(stepTime);
 			}
-		} else
+		} 
+		else 
+		{
 			throw new IllegalArgumentException("Tiempo no valido.");
+		}
 	}
 	
 	public void setLaw(ForceLaws forceLaws)//Cambia la ley gravitacional
@@ -120,7 +128,9 @@ public class PhysicsSimulator {
 			}
 		}
 		else
+		{
 			throw new IllegalArgumentException("Ley de fuerza no valida.");
+		}
 	}
 }
 
