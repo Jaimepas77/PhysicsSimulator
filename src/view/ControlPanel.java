@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
@@ -47,9 +48,8 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	//Spinner & observador
 	private JSpinner step;
 	
+	JTextField textTime;
 	
-	JTextField text_time;
-
 	
 	ControlPanel(Controller controller){
 		this.controller = controller;
@@ -57,6 +57,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		initGUI();
 		controller.addObserver(this);
 	}
+	
 	ControlPanel(){
 		initGUI();
 	}
@@ -66,53 +67,64 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		this.setLayout(new BorderLayout());
 		
 		toolBar = new JToolBar();
-		//
-		intFileButton();//ToDo
+		
+		//Boton de seleccion de fichero
+		initFileButton();//ToDo
 		toolBar.add(fileButton);
+		
 		toolBar.addSeparator();
-		//
+		
+		//Boton de selección de la ley gravitacional
 		initLawConfButton();//ToDo
 		toolBar.add(lawConfButton);
-		//
+		
+		toolBar.addSeparator();
+		
+		//Boton de reproducir (play)
+		initRunButton();//ToDo
+		toolBar.add(runButton);
+		
+		//Boton de pausa
 		initPauseButton();
 		toolBar.add(pauseButton);
-		toolBar.addSeparator();
-		//Spinner
+		
+		//Spinner de seleccion del numero de pasos a ejecutar
 		step = new JSpinner(new SpinnerNumberModel(10, 1, 100000, 1));//Al JUGAR
 		step.setMaximumSize(new Dimension(80, 40));
 		step.setPreferredSize(new Dimension(80, 40));
-		//
-		initRunButton();//ToDo
-		toolBar.add(runButton);
-		JLabel stepLabel= new JLabel("step:");
+		JLabel stepLabel= new JLabel("Steps: ");
 		toolBar.add(stepLabel);
 		toolBar.add(step);
 		
 		toolBar.addSeparator();
-		//
-		JLabel delta= new JLabel("Delta-tiem:");
-		text_time = new JTextField();
-		text_time.setColumns(4);
-		text_time.setMaximumSize(text_time.getPreferredSize());//Para que mantenga una distacia con exitButton
-		text_time.setText(realTime + "");
+		
+		//TextField del DeltaTime
+		JLabel delta = new JLabel("Delta-Time: ");
+		textTime = new JTextField();
+		textTime.setColumns(4);
+		textTime.setMaximumSize(textTime.getPreferredSize());//Para que mantenga una distacia con exitButton
+		textTime.setText(realTime + "");
 		toolBar.add(delta);
-		toolBar.add(text_time);
-		//
-		initExitButton();
-		toolBar.add(Box.createGlue());//Pegamento
+		toolBar.add(textTime);
+		
+		toolBar.add(Box.createGlue());//Pegamento para la redimension
 		toolBar.addSeparator();
+		
+		//Boton de apagar
+		initExitButton();
 		toolBar.add(exitButton);
 		
-		this.add(toolBar,BorderLayout.PAGE_START);
-		
+		this.add(toolBar);//No hace falta especificar la ubicación en el layout porque sólo se inserta un elemento (y el borderLayout sólo se usa para que redimensione bien.)
 	}
 	
-	private void intFileButton() {
+	private void initFileButton() {
 		fileButton = new JButton(new ImageIcon("resources\\icons\\open.png"));//Completar dir¡¢
+		fileButton.setToolTipText("Seleccionar fichero fuente");
+		
 		fileButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fileChooser =  new JFileChooser(); 
+				JFileChooser fileChooser = new JFileChooser(); 
 				
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);//
 				int selection = fileChooser.showOpenDialog(fileButton);//Abre la ventana 
@@ -127,7 +139,6 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 						e1.printStackTrace();
 					}
 				}
-				
 			}
 		}
 		);
@@ -135,27 +146,29 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	
 	private void initLawConfButton() {
 
-		lawConfButton = new JButton(new ImageIcon("resources/icons/physics.png"));//Ambas formas vadria
+		lawConfButton = new JButton(new ImageIcon("resources/icons/physics.png"));//Ambas formas valdrian
+		lawConfButton.setToolTipText("Seleccionar ley de gravitación");
+		
 		lawConfButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {//Hay que usar table.
 				//controller.setForceLaws(info);
-		
+
 				JComboBox comboBox= new JComboBox(); 
 				List<JSONObject> laws = controller.getForceLawsInfo();
-				
+
 				for(JSONObject o : laws) {
 					comboBox.addItem(o.getString("desc"));
 				}
-			
 			}
-					
-			}
+		}
 		);
 	}
 	
 	private void initPauseButton() {
 		pauseButton = new JButton(new ImageIcon("resources/icons/stop.png"));
+		pauseButton.setToolTipText("Pausar");
+		
 		pauseButton.addActionListener(new ActionListener() {
 			
 			@Override
@@ -168,54 +181,61 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	
 	private void initRunButton() {
 		runButton  = new JButton(new ImageIcon("resources/icons/run.png"));
+		runButton.setToolTipText("Ejecutar");
+		
 		runButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				fileButton.setEnabled(false);//Desactivar todas los botones
+				fileButton.setEnabled(false);//Desactivar todos los botones
 				lawConfButton.setEnabled(false);
+				runButton.setEnabled(false);
 				exitButton.setEnabled(false);
+				textTime.setEnabled(false);
+				step.setEnabled(false);
+				
 				stopped = false;
 				run_sim((int)step.getValue());
 			}
-			
-		});
-		
+		}
+		);		
 	}
 	
 	private void initExitButton() {
 		exitButton = new JButton(new ImageIcon("resources/icons/exit.png"));
+		exitButton.setToolTipText("Salir");
 
 		exitButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int op = JOptionPane.showConfirmDialog(exitButton, "Salir","Ventana de Confirmacion" ,JOptionPane.YES_NO_OPTION);
-				if(op ==JOptionPane.YES_OPTION) {
+				int op = JOptionPane.showConfirmDialog(exitButton, "Salir", "Ventana de Confirmacion", JOptionPane.YES_NO_OPTION);
+				if(op == JOptionPane.YES_OPTION) {
 					System.exit(0);
 				}
 			}
-			
 		});
-		
 	}
 	
 	private void run_sim(int n) {
-		if ( n>0 && ! stopped ) {
-		try {
-			//controller.run(1);
-		} catch (Exception e) {
-			// TODO show the error in a dialog box
-			// TODO enable all buttons
-			allButtonEnable();
-			stopped = true;
-		}
-		SwingUtilities.invokeLater( new Runnable() {
-			@Override
-			public void run() {
-				run_sim(n-1);
+		if (n > 0 && !stopped) {
+			try {
+				//controller.run(1);
+			} catch (Exception e) {
+				// TODO show the error in a dialog box
+
+				// TODO enable all buttons
+				allButtonEnable();
+
+				stopped = true;
+				return;
 			}
-		});
+			SwingUtilities.invokeLater( new Runnable() {
+				@Override
+				public void run() {
+					run_sim(n-1);
+				}
+			});
 		} else {
 			stopped = true;
 			// TODO enable all buttons
@@ -260,7 +280,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	
 	private void updateTime(double time) {
 		this.realTime = time;
-		text_time.setText(realTime + "");
+		textTime.setText(realTime + "");
 	}
 	
 	private void allButtonEnable() {
@@ -270,6 +290,8 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		pauseButton.setEnabled(true);
 		runButton.setEnabled(true);
 		exitButton.setEnabled(true);
+		textTime.setEnabled(true);
+		step.setEnabled(true);
 	}
 	
 	public static void main(String[] args) {
@@ -277,9 +299,10 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		JFrame j = new JFrame("Prueba");
 		j.setLayout(new BorderLayout());
 		ControlPanel p = new ControlPanel();//No funcionaria la parte que necesita controller
-		j.add(p,BorderLayout.NORTH);
+		j.add(p,BorderLayout.PAGE_START);
 		j.pack();
 		j.setVisible(true);
+		j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 }
