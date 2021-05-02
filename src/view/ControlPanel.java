@@ -46,9 +46,9 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	private JToolBar toolBar;
 	
 	//Spinner & observador
-	private JSpinner step;
+	private JSpinner steps;//Contiene el numero de pasos a ejecutar
 	
-	JTextField textTime;
+	JTextField deltaTime;//Campo de texto en el que se introduce el tiempo por paso
 	
 	
 	ControlPanel(Controller controller){
@@ -89,23 +89,23 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		toolBar.add(pauseButton);
 		
 		//Spinner de seleccion del numero de pasos a ejecutar
-		step = new JSpinner(new SpinnerNumberModel(10, 1, 100000, 1));//Al JUGAR
-		step.setMaximumSize(new Dimension(80, 40));
-		step.setPreferredSize(new Dimension(80, 40));
+		steps = new JSpinner(new SpinnerNumberModel(10, 1, 100000, 1));//Al JUGAR
+		steps.setMaximumSize(new Dimension(80, 40));
+		steps.setPreferredSize(new Dimension(80, 40));
 		JLabel stepLabel= new JLabel("Steps: ");
 		toolBar.add(stepLabel);
-		toolBar.add(step);
+		toolBar.add(steps);
 		
 		toolBar.addSeparator();
 		
 		//TextField del DeltaTime
 		JLabel delta = new JLabel("Delta-Time: ");
-		textTime = new JTextField();
-		textTime.setColumns(4);
-		textTime.setMaximumSize(textTime.getPreferredSize());//Para que mantenga una distacia con exitButton
-		textTime.setText(realTime + "");
+		deltaTime = new JTextField();
+		deltaTime.setColumns(4);
+		deltaTime.setMaximumSize(deltaTime.getPreferredSize());//Para que mantenga una distacia con exitButton
+		deltaTime.setText(realTime + "");
 		toolBar.add(delta);
-		toolBar.add(textTime);
+		toolBar.add(deltaTime);
 		
 		toolBar.add(Box.createGlue());//Pegamento para la redimension
 		toolBar.addSeparator();
@@ -191,11 +191,11 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 				lawConfButton.setEnabled(false);
 				runButton.setEnabled(false);
 				exitButton.setEnabled(false);
-				textTime.setEnabled(false);
-				step.setEnabled(false);
+				deltaTime.setEnabled(false);
+				steps.setEnabled(false);
 				
 				stopped = false;
-				run_sim((int)step.getValue());
+				run_sim((int)steps.getValue());
 			}
 		}
 		);		
@@ -246,14 +246,12 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 
 	@Override
 	public void onRegister(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		updateTime(time);
-		updateStep(dt);
+		updateDeltaTime(time);
 	}
 
 	@Override
 	public void onReset(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		updateTime(time);
-		updateStep(dt);
+		updateDeltaTime(time);
 	}
 
 	@Override
@@ -262,25 +260,20 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 
 	@Override
 	public void onAdvance(List<Body> bodies, double time) {
-		updateTime(time);
 	}
 
 	@Override
 	public void onDeltaTimeChanged(double dt) {
-		updateStep(dt);
+		updateDeltaTime(dt);
 	}
 
 	@Override
 	public void onForceLawsChanged(String fLawsDesc) {
 	}
 	
-	private void updateStep(double dt) {
-		step.setValue(dt);
-	}
-	
-	private void updateTime(double time) {
+	private void updateDeltaTime(double time) {//Actualiza el tiempo por paso de ejecucion (el delta-time)
 		this.realTime = time;
-		textTime.setText(realTime + "");
+		deltaTime.setText(realTime + "");
 	}
 	
 	private void allButtonEnable() {
@@ -290,8 +283,8 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		pauseButton.setEnabled(true);
 		runButton.setEnabled(true);
 		exitButton.setEnabled(true);
-		textTime.setEnabled(true);
-		step.setEnabled(true);
+		deltaTime.setEnabled(true);
+		steps.setEnabled(true);
 	}
 	
 	public static void main(String[] args) {
