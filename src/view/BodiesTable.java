@@ -36,16 +36,4 @@ public class BodiesTable extends JPanel {
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
 	}
 	
-	public static void main(String[] args) {
-		
-		JFrame j = new JFrame("Prueba");
-		j.setLayout(new BorderLayout());
-		BodiesTable b = new BodiesTable(null);//No funcionaria la parte que necesita controller
-		ControlPanel p = new ControlPanel();
-		j.add(p,BorderLayout.NORTH);
-		j.add(b,BorderLayout.CENTER);
-		j.pack();
-		j.setVisible(true);
-	}
-
 }

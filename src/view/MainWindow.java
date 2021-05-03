@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.*;
 
@@ -38,13 +39,21 @@ public class MainWindow extends JFrame{
 		this.add(centerPanel,BorderLayout.CENTER);
 		this.add(statusBar,BorderLayout.PAGE_END);
 		
-		//manejar la dimension desde ventana principal
+		
 		centerPanel.add(bodiesTable);
-		centerPanel.add(controlPanel);
+		centerPanel.add(viewer);
+		//manejar las dimensiones desde la ventana principal
+		bodiesTable.setPreferredSize(new Dimension(800,300));
+		viewer.setPreferredSize(new Dimension(800,600));
 		
 		this.pack();
 		this.setVisible(true);
 	}
+	
+	public static void main(String[] args) {
+		new MainWindow(null);
+	}
+	
 	// other private/protected methods
 	// ...
 	

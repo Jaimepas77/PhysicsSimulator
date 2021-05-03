@@ -151,6 +151,7 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 		_centerX = getWidth() / 2;
 		_centerY = getHeight() / 2;
 		// TODO draw a cross at center
+		gr.setColor(Color.red);
 		gr.drawLine(_centerX - 5, _centerY, _centerX + 5, _centerY);
 		gr.drawLine(_centerX , _centerY- 5, _centerX , _centerY + 5);
 		// TODO draw bodies (with vectors if _showVectors is true)
@@ -159,10 +160,7 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 		gr.drawOval(40, 40, 10, 10);
 		gr.fillOval(80, 80, 10, 10);
 		gr.drawString("1", 41, 30);
-		//
-		gr.setColor(Color.red);
-		gr.drawString(helpMsg, 40, 89);
-		gr.drawString("scaling ration:" + String.valueOf(_scale) ,0 , 10);
+		
 		for (Body b : _bodies) {
 			int x = (int)b.getPosition().getX();
 			int y = (int)b.getPosition().getY();
@@ -183,8 +181,8 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 		if(_showHelp) {
 			//A ajustar
 			gr.setColor(Color.red);
-			gr.drawString(helpMsg, 0, 0);
-			gr.drawString("scaling ration:" + String.valueOf(_scale) ,0 , 10);
+			gr.drawString(helpMsg, 10, 25);
+			gr.drawString("scaling ration:" + String.valueOf(_scale), 10, 42);
 		}
 	}
 	
@@ -253,27 +251,6 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 		this._bodies = bodies;
 		autoScale();
 		repaint();
-	}
-	
-	public static void main(String[] args) {
-		
-		JFrame j = new JFrame("Prueba");
-		j.setLayout(new BorderLayout());
-		
-		BodiesTable b = new BodiesTable(null);//No funcionaria la parte que necesita controller
-		ControlPanel p = new ControlPanel();
-		Viewer v = new Viewer(null);
-		
-		JPanel nuevo = new JPanel();
-		nuevo.setLayout(new BoxLayout(nuevo,BoxLayout.Y_AXIS));//Simula un poco la ventana principal.
-		
-		j.add(p,BorderLayout.PAGE_START);
-		j.add(nuevo,BorderLayout.CENTER);
-		nuevo.add(b);
-		nuevo.add(v);
-		
-		j.pack();
-		j.setVisible(true);
 	}
 	
 }

@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.util.List;
 
@@ -28,20 +29,24 @@ public class StatusBar extends JPanel implements SimulatorObserver {
 	
 	StatusBar(Controller controller) {
 		initGUI();
-		controller.addObserver(this);
+		//controller.addObserver(this);
 	}
 	private void initGUI() {
 		this.setLayout( new FlowLayout( FlowLayout.LEFT ));
 		this.setBorder( BorderFactory.createBevelBorder( 1 ));
 	// TODO complete the code to build the tool bar
 		JToolBar toolBar = new JToolBar();
-		
 		//Por defecto
 		_currTime = new JLabel(TIME + "0.0");
 		_numOfBodies = new JLabel(BODIES + "0");
 		_currLaws = new JLabel(LAWS + "Newton Gravitation with G : ....");
+		
 		toolBar.add(_currTime);
+		toolBar.addSeparator();
+		toolBar.add(Box.createGlue());
+		toolBar.addSeparator();
 		toolBar.add(_numOfBodies);
+		toolBar.addSeparator();
 		toolBar.add(_currLaws);
 		this.add(toolBar);
 	}

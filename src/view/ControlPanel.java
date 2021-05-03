@@ -55,11 +55,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		this.controller = controller;
 		stopped = false;
 		initGUI();
-		controller.addObserver(this);
-	}
-	
-	ControlPanel(){
-		initGUI();
+		//controller.addObserver(this);
 	}
 
 	private void initGUI() {
@@ -286,16 +282,4 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		deltaTime.setEnabled(true);
 		steps.setEnabled(true);
 	}
-	
-	public static void main(String[] args) {
-		
-		JFrame j = new JFrame("Prueba");
-		j.setLayout(new BorderLayout());
-		ControlPanel p = new ControlPanel();//No funcionaria la parte que necesita controller
-		j.add(p,BorderLayout.PAGE_START);
-		j.pack();
-		j.setVisible(true);
-		j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-
 }
