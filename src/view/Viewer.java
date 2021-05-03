@@ -38,6 +38,9 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 	private boolean _showHelp;
 	private boolean _showVectors;
 	
+	//
+	private static final String helpMsg = "h:toggle help, v:toggle vector, +:zoom in, -:zoom out, =:fir";
+	
 	public Viewer(Controller ctrl) {
 		initGUI();
 		//ctrl.addObserver(this);
@@ -148,16 +151,41 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 		_centerX = getWidth() / 2;
 		_centerY = getHeight() / 2;
 		// TODO draw a cross at center
-		g.drawLine(_centerX - 5, _centerY, _centerX + 5, _centerY);
-		g.drawLine(_centerX , _centerY- 5, _centerX , _centerY + 5);
+		gr.drawLine(_centerX - 5, _centerY, _centerX + 5, _centerY);
+		gr.drawLine(_centerX , _centerY- 5, _centerX , _centerY + 5);
 		// TODO draw bodies (with vectors if _showVectors is true)
+		//Jugando un poco
+		gr.setColor(Color.blue);
+		gr.drawOval(40, 40, 10, 10);
+		gr.fillOval(80, 80, 10, 10);
+		gr.drawString("1", 41, 30);
+		//
+		gr.setColor(Color.red);
+		gr.drawString(helpMsg, 40, 89);
+		gr.drawString("scaling ration:" + String.valueOf(_scale) ,0 , 10);
 		for (Body b : _bodies) {
-			g.drawOval(_centerX + (int)(b.getPosition().getX()/_scale), _centerY + (int)(b.getPosition().getY()/_scale), 10, 10);//Radio 5 diametro 10
+			int x = (int)b.getPosition().getX();
+			int y = (int)b.getPosition().getY();
+			gr.setColor(Color.blue);
+			gr.drawOval(_centerX + (int)(x/_scale), _centerY + (int)(y/_scale) , 10, 10);//Radio 5 diametro 10
+			gr.drawString(b.getId(), x, y);//Habria que ajustar un poco
 			if(_showVectors) {
-				//drawLineWithArrow(g, _centerX, _centerX, _centerX, _centerX, _centerX, _centerX, preserveBackgroundColor, preserveBackgroundColor);
+				int forceX = (int) b.getForce().getX();
+				int forceY = (int) b.getForce().getY();
+				
+				int velocityX = (int) b.getVelocity().getX();
+				int velocityY = (int) b.getVelocity().getY();
+				//drawLineWithArrow(g, x, y, ..., ..., 2, 3, Color.red, Color.red);
+				//drawLineWithArrow(g, x, y, ..., ..., 2, 3, Color.red, Color.red);
 			}
 		}
 		// TODO draw help if _showHelp is true
+		if(_showHelp) {
+			//A ajustar
+			gr.setColor(Color.red);
+			gr.drawString(helpMsg, 0, 0);
+			gr.drawString("scaling ration:" + String.valueOf(_scale) ,0 , 10);
+		}
 	}
 	
 	// other private/protected methods
@@ -198,33 +226,33 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 	// SimulatorObserver methods
 	@Override
 	public void onRegister(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		// TODO Auto-generated method stub
-		
+		updateBodies(bodies);
 	}
 	@Override
 	public void onReset(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		// TODO Auto-generated method stub
-		
+		updateBodies(bodies);
 	}
 	@Override
 	public void onBodyAdded(List<Body> bodies, Body b) {
-		// TODO Auto-generated method stub
-		
+		updateBodies(bodies);
 	}
 	@Override
 	public void onAdvance(List<Body> bodies, double time) {
-		// TODO Auto-generated method stub
-		
+		updateBodies(bodies);
 	}
 	@Override
 	public void onDeltaTimeChanged(double dt) {
-		// TODO Auto-generated method stub
 		
 	}
 	@Override
 	public void onForceLawsChanged(String fLawsDesc) {
-		// TODO Auto-generated method stub
 		
+	}
+	
+	private void updateBodies(List<Body> bodies) {
+		this._bodies = bodies;
+		autoScale();
+		repaint();
 	}
 	
 	public static void main(String[] args) {
