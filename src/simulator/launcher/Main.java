@@ -2,10 +2,14 @@ package simulator.launcher;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -23,6 +27,7 @@ import simulator.factories.*;
 import simulator.model.Body;
 import simulator.model.ForceLaws;
 import simulator.model.PhysicsSimulator;
+import view.MainWindow;
 
 public class Main {
 
@@ -32,6 +37,7 @@ public class Main {
 	private final static String _forceLawsDefaultValue = "nlug";
 	private final static String _stateComparatorDefaultValue = "epseq";
 	private final static Integer _defaultStep = 150;
+	private final static String _defaultMode = "Batch";
 
 	// some attributes to stores values corresponding to command-line parameters
 	//
@@ -42,6 +48,7 @@ public class Main {
 	private static Integer _step =  null;
 	private static String _outFile = null;
 	private static String _expOutFile = null;
+	private static String _mode = null;
 
 	// factories
 	private static Factory<Body> _bodyFactory;
@@ -89,6 +96,8 @@ public class Main {
 			parseDeltaTimeOption(line);
 			parseForceLawsOption(line);
 			parseStateComparatorOption(line);
+			//add support of -m //TODO
+			parseModeOption(line);
 
 			// if there are some remaining arguments, then something wrong is
 			// provided in the command line!
@@ -148,6 +157,11 @@ public class Main {
 				.desc("State comparator to be used when comparing states. Possible values: "
 						+ factoryPossibleValues(_stateComparatorFactory) + ". Default value: '"
 						+ _stateComparatorDefaultValue + "'.")
+				.build());
+		
+		// execute mode
+		cmdLineOptions.addOption(Option.builder("m").longOpt("mode").hasArg()
+				.desc("Excution Mode.Posible values: 'Batch'Bacth mode, 'Gui' GUI mode.Default values: Batch")
 				.build());
 
 		return cmdLineOptions;
@@ -212,6 +226,16 @@ public class Main {
 
 	private static void parseOutFileOption(CommandLine line) {
 		_outFile  = line.getOptionValue("o");//Se compararia si es null en startBatchMode()
+		
+	}
+	
+	private static void parseModeOption(CommandLine line) throws ParseException {//TODO
+		String dm = line.getOptionValue("m",_defaultMode).toLowerCase();
+		
+		if(!dm.equals("batch") && !dm.equals("gui")) {
+			throw new ParseException("Invalida excute mode: " + dm);
+		}
+		_mode = dm;
 		
 	}
 
@@ -293,7 +317,32 @@ public class Main {
 
 	private static void start(String[] args) throws Exception {
 		parseArgs(args);
-		startBatchMode();
+		if(_mode.equals("batch")) {
+			startBatchMode();
+		}
+		else {
+			startGUIMode();
+		}
+	}
+
+	private static void startGUIMode() throws InvocationTargetException, InterruptedException, FileNotFoundException {
+		//Crear el simulator
+		PhysicsSimulator simulator = new PhysicsSimulator(_dtime, _forceLawsFactory.createInstance(_forceLawsInfo));
+		Controller controller = new Controller(simulator, _bodyFactory,_forceLawsFactory);
+		
+		//Es opcional i y otros se ignoran
+		if(_inFile != null) {
+			InputStream is = new FileInputStream(new File(_inFile));
+			controller.loadBodies(is);
+		}
+		
+		SwingUtilities.invokeAndWait(new Runnable() {
+			@Override
+			public void run() {
+				new MainWindow(controller);
+			}
+		});
+		
 	}
 
 	public static void main(String[] args) {
