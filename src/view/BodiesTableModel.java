@@ -19,8 +19,8 @@ public class BodiesTableModel extends AbstractTableModel implements SimulatorObs
 	private List<Body> bodies;
 	//Contructores
 	public BodiesTableModel(Controller controller) {
-		//controller.addObserver(this); //Para prueba
 		this.bodies = new ArrayList<>();
+		controller.addObserver(this); //Para prueba
 	}
 	
 	//Metodos a ser un TableModel
