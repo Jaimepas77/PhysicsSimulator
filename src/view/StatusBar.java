@@ -29,7 +29,7 @@ public class StatusBar extends JPanel implements SimulatorObserver {
 	
 	StatusBar(Controller controller) {
 		initGUI();
-		//controller.addObserver(this);
+		controller.addObserver(this);
 	}
 	private void initGUI() {
 		this.setLayout( new FlowLayout( FlowLayout.LEFT ));

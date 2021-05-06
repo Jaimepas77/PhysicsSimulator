@@ -43,7 +43,7 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 	
 	public Viewer(Controller ctrl) {
 		initGUI();
-		//ctrl.addObserver(this);
+		ctrl.addObserver(this);
 	}
 	
 	private void initGUI() {
@@ -155,18 +155,12 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 		gr.drawLine(_centerX - 5, _centerY, _centerX + 5, _centerY);
 		gr.drawLine(_centerX , _centerY- 5, _centerX , _centerY + 5);
 		// TODO draw bodies (with vectors if _showVectors is true)
-		//Jugando un poco
-		gr.setColor(Color.blue);
-		gr.drawOval(40, 40, 10, 10);
-		gr.fillOval(80, 80, 10, 10);
-		gr.drawString("1", 41, 30);
-		
 		for (Body b : _bodies) {
-			int x = (int)b.getPosition().getX();
-			int y = (int)b.getPosition().getY();
+			double x = b.getPosition().getX();
+			double y = b.getPosition().getY();
 			gr.setColor(Color.blue);
-			gr.drawOval(_centerX + (int)(x/_scale), _centerY + (int)(y/_scale) , 10, 10);//Radio 5 diametro 10
-			gr.drawString(b.getId(), x, y);//Habria que ajustar un poco
+			gr.fillOval(_centerX + (int)(x/_scale), _centerY + (int)(y/_scale) , 10, 10);//Radio 5 diametro 10
+			gr.drawString(b.getId(), _centerX + (int)(x/_scale) ,  _centerY + (int)(y/_scale) );//Habria que ajustar un poco
 			if(_showVectors) {
 				int forceX = (int) b.getForce().getX();
 				int forceY = (int) b.getForce().getY();
@@ -236,7 +230,7 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 	}
 	@Override
 	public void onAdvance(List<Body> bodies, double time) {
-		updateBodies(bodies);
+		repaint();
 	}
 	@Override
 	public void onDeltaTimeChanged(double dt) {
