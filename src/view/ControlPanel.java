@@ -13,7 +13,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import javax.swing.*;
@@ -225,9 +227,10 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	private void run_sim(int n) {
 		if (n > 0 && !stopped) {
 			try {
-				//controller.run(1);
+				controller.run(1);
 			} catch (Exception e) {
 				// TODO show the error in a dialog box
+				JOptionPane.showMessageDialog(null, e.getMessage());
 
 				// TODO enable all buttons
 				buttonEnable(true);
@@ -282,10 +285,11 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	}
 	
 	private void buttonEnable(boolean value) {
-		// TODO enable all buttons
 		fileButton.setEnabled(value);
 		lawConfButton.setEnabled(value);
-		pauseButton.setEnabled(value);
+		if(value) {//El button de pausa nunca se deshabilita
+			pauseButton.setEnabled(value);
+		}
 		runButton.setEnabled(value);
 		exitButton.setEnabled(value);
 		deltaTime.setEnabled(value);

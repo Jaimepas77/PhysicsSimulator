@@ -113,7 +113,7 @@ public class PhysicsSimulator {
 		} 
 		else 
 		{
-			throw new IllegalArgumentException("Tiempo no valido.");
+			throw new IllegalArgumentException("Delta-time no valido.");
 		}
 	}
 	

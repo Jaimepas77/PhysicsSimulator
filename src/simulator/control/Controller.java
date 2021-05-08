@@ -115,5 +115,12 @@ public class Controller {
 		p.println("}");
 	
 	}
+
+	public void run(int n) {
+		//Ejecutar n pasos de la simulacion
+		for(int i = 1; i <= n ; i++) {
+			simulator.advance();
+		}
+	}
 	
 }
