@@ -37,6 +37,8 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	
 	//Buttons
 	private JButton fileButton;
+	private JFileChooser fileChooser;
+	
 	private JButton lawConfButton;
 	private JButton pauseButton;
 	private JButton runButton;
@@ -53,7 +55,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	
 	ControlPanel(Controller controller){
 		this.controller = controller;
-		stopped = false;
+		stopped = false;//true;
 		initGUI();
 		//controller.addObserver(this);
 	}
@@ -117,11 +119,11 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		fileButton = new JButton(new ImageIcon("resources\\icons\\open.png"));//Completar dir¡¢
 		fileButton.setToolTipText("Seleccionar fichero fuente");
 		
-		fileButton.addActionListener(new ActionListener(){
+		fileChooser = new JFileChooser();//Se inicializa el fileChooser que luego se empleara cada vez que se pulse el boton
+		
+		fileButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fileChooser = new JFileChooser(); 
-				
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);//
 				int selection = fileChooser.showOpenDialog(fileButton);//Abre la ventana 
 				
