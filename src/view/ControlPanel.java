@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -37,12 +38,13 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	
 	//Buttons
 	private JButton fileButton;
-	private JFileChooser fileChooser;
-	
 	private JButton lawConfButton;
 	private JButton pauseButton;
 	private JButton runButton;
 	private JButton exitButton;
+
+	//Selector de ficheros
+	private JFileChooser fileChooser;
 	
 	//ToolBar
 	private JToolBar toolBar;
@@ -152,26 +154,12 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 			public void actionPerformed(ActionEvent e) {//Hay que usar table.
 				//controller.setForceLaws(info);
 
-				JComboBox comboBox= new JComboBox(); 
+				JComboBox comboBox = new JComboBox(); 
 				List<JSONObject> laws = controller.getForceLawsInfo();
 
 				for(JSONObject o : laws) {
 					comboBox.addItem(o.getString("desc"));
 				}
-			}
-		}
-		);
-	}
-	
-	private void initPauseButton() {
-		pauseButton = new JButton(new ImageIcon("resources/icons/stop.png"));
-		pauseButton.setToolTipText("Pausar");
-		
-		pauseButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				stopped = true;
 			}
 		}
 		);
@@ -193,10 +181,33 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 				steps.setEnabled(false);
 				
 				stopped = false;
-				run_sim((int)steps.getValue());
+				try {
+					controller.setStepTime(Double.parseDouble(deltaTime.getText()));//Se ajusta el delta time según ha especificado el usuario (stepTime = deltaTime)
+
+					run_sim((int)steps.getValue());
+				}
+				catch (IllegalArgumentException error) {
+					JOptionPane.showMessageDialog(null, error.getMessage());
+					allButtonEnable();
+					stopped = true;
+				}
 			}
 		}
 		);		
+	}
+	
+	private void initPauseButton() {
+		pauseButton = new JButton(new ImageIcon("resources/icons/stop.png"));
+		pauseButton.setToolTipText("Pausar");
+		
+		pauseButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				stopped = true;
+			}
+		}
+		);
 	}
 	
 	private void initExitButton() {

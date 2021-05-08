@@ -27,25 +27,25 @@ public class MainWindow extends JFrame{
 		// ..
 		
 		//Paneles
-		BodiesTable bodiesTable = new BodiesTable(controller);
+		//BodiesTable bodiesTable = new BodiesTable(controller);
 		ControlPanel controlPanel = new ControlPanel(controller);
-		Viewer viewer = new Viewer(controller);
-		StatusBar statusBar = new StatusBar(controller);
+		//Viewer viewer = new Viewer(controller);
+		//StatusBar statusBar = new StatusBar(controller);
 		
 		JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(new BoxLayout(centerPanel,BoxLayout.Y_AXIS));
 		
 		this.add(controlPanel,BorderLayout.PAGE_START);
 		this.add(centerPanel,BorderLayout.CENTER);
-		this.add(statusBar,BorderLayout.PAGE_END);
+		//this.add(statusBar,BorderLayout.PAGE_END);
 		
-		
+		/*
 		centerPanel.add(bodiesTable);
 		centerPanel.add(viewer);
 		//manejar las dimensiones desde la ventana principal
 		bodiesTable.setPreferredSize(new Dimension(800,300));
 		viewer.setPreferredSize(new Dimension(800,600));
-		
+		*/
 		this.pack();
 		this.setVisible(true);
 	}
