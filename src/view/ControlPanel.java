@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.swing.*;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import simulator.control.Controller;
@@ -61,7 +62,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		this.controller = controller;
 		stopped = false;//true;
 		initGUI();
-		//controller.addObserver(this);
+		controller.addObserver(this);
 	}
 
 	private void initGUI() {
@@ -139,6 +140,9 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 						controller.loadBodies(is);
 					} catch (FileNotFoundException e1) {
 						e1.printStackTrace();
+					}
+					catch (JSONException e2) {
+						JOptionPane.showMessageDialog(null, "Error en el JSON: " + e2.getMessage(),  "ERROR", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
