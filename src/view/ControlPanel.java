@@ -173,12 +173,8 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				fileButton.setEnabled(false);//Desactivar todos los botones
-				lawConfButton.setEnabled(false);
-				runButton.setEnabled(false);
-				exitButton.setEnabled(false);
-				deltaTime.setEnabled(false);
-				steps.setEnabled(false);
+				//Desactivar todos los botones
+				buttonEnable(false);
 				
 				stopped = false;
 				try {
@@ -188,7 +184,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 				}
 				catch (IllegalArgumentException error) {
 					JOptionPane.showMessageDialog(null, error.getMessage());
-					allButtonEnable();
+					buttonEnable(true);
 					stopped = true;
 				}
 			}
@@ -234,7 +230,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 				// TODO show the error in a dialog box
 
 				// TODO enable all buttons
-				allButtonEnable();
+				buttonEnable(true);
 
 				stopped = true;
 				return;
@@ -248,7 +244,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		} else {
 			stopped = true;
 			// TODO enable all buttons
-			allButtonEnable();
+			buttonEnable(true);
 		}
 	}
 
@@ -285,14 +281,14 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		deltaTime.setText(realTime + "");
 	}
 	
-	private void allButtonEnable() {
+	private void buttonEnable(boolean value) {
 		// TODO enable all buttons
-		fileButton.setEnabled(true);
-		lawConfButton.setEnabled(true);
-		pauseButton.setEnabled(true);
-		runButton.setEnabled(true);
-		exitButton.setEnabled(true);
-		deltaTime.setEnabled(true);
-		steps.setEnabled(true);
+		fileButton.setEnabled(value);
+		lawConfButton.setEnabled(value);
+		pauseButton.setEnabled(value);
+		runButton.setEnabled(value);
+		exitButton.setEnabled(value);
+		deltaTime.setEnabled(value);
+		steps.setEnabled(value);
 	}
 }
