@@ -15,11 +15,12 @@ public class BodiesTableModel extends AbstractTableModel implements SimulatorObs
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String[] col = {"Id","Mass","Position","Velocity","Force"};
+	private String[] columns = {"Id", "Mass", "Position", "Velocity", "Force"};
 	private List<Body> bodies;
+	
 	//Contructores
 	public BodiesTableModel(Controller controller) {
-		this.bodies = new ArrayList<>();
+		bodies = new ArrayList<>();
 		controller.addObserver(this); //Para prueba
 	}
 	
@@ -31,41 +32,43 @@ public class BodiesTableModel extends AbstractTableModel implements SimulatorObs
 
 	@Override
 	public int getColumnCount() {
-		return col.length;
+		return columns.length;
+	}
+	
+	@Override
+	public String getColumnName(int column) {
+		return this.columns[column];
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		Object s = null;
+		Object value = null;
+		Body b = bodies.get(rowIndex);
+		
 		switch (columnIndex) {
 		case 0:
-			s = bodies.get(rowIndex).getId();
+			value = b.getId();
 			break;
 		case 1:
-			s = bodies.get(rowIndex).getMass();
+			value = b.getMass();
 			break;
 		case 2:
-			s = bodies.get(rowIndex).getPosition();
+			value = b.getPosition();
 			break;
 		case 3:
-			s = bodies.get(rowIndex).getVelocity();
+			value = b.getVelocity();
 			break;
 		case 4:
-			s = bodies.get(rowIndex).getForce();
+			value = b.getForce();
 			break;
 		}
-		return s;
-	}
-	
-	@Override
-	public String getColumnName(int col) {
-		return this.col[col];
+		return value;
 	}
 	
 	//Metodos por ser un observador
 	public void setBodies(List<Body> bodies) {
 		this.bodies = bodies;
-		fireTableDataChanged();//Notificar el cambio
+		fireTableStructureChanged();//Notificar los cambios realizados
 	}
 	@Override
 	public void onRegister(List<Body> bodies, double time, double dt, String fLawsDesc) {

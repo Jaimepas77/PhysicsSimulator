@@ -29,7 +29,7 @@ public class BodiesTable extends JPanel {
 		);
 		//Table
 		// TODO complete
-		BodiesTableModel bodiesTableModel = new BodiesTableModel(controller);//Model a seguir(orientado por Jtable(example))
+		BodiesTableModel bodiesTableModel = new BodiesTableModel(controller);//Model a seguir (orientado por Jtable(example))
 		JTable bodiestable = new JTable(bodiesTableModel);
 		this.add(new JScrollPane(bodiestable,
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,

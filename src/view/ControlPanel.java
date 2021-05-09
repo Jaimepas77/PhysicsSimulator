@@ -125,11 +125,12 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		fileButton.setToolTipText("Seleccionar fichero fuente");
 		
 		fileChooser = new JFileChooser();//Se inicializa el fileChooser que luego se empleara cada vez que se pulse el boton
+		fileChooser.setCurrentDirectory(new File("resources\\examples"));
+		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		
 		fileButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);//
 				int selection = fileChooser.showOpenDialog(fileButton);//Abre la ventana 
 				
 				if(selection == JFileChooser.APPROVE_OPTION) {//Si selecciona
