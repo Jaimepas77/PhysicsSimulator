@@ -39,6 +39,8 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 	private boolean _showVectors;
 	
 	//
+	private static final int radius = 5; 
+	
 	private static final String helpMsg = "h:toggle help, v:toggle vector, +:zoom in, -:zoom out, =:fir";
 	
 	public Viewer(Controller ctrl) {
@@ -153,22 +155,26 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 		// TODO draw a cross at center
 		gr.setColor(Color.red);
 		gr.drawLine(_centerX - 5, _centerY, _centerX + 5, _centerY);
-		gr.drawLine(_centerX , _centerY- 5, _centerX , _centerY + 5);
+		gr.drawLine(_centerX, _centerY- 5, _centerX, _centerY + 5);
 		// TODO draw bodies (with vectors if _showVectors is true)
 		for (Body b : _bodies) {
-			double x = b.getPosition().getX();
-			double y = b.getPosition().getY();
+			int x = _centerX + (int)(b.getPosition().getX() / _scale);
+			int y = _centerY - (int)(b.getPosition().getY() / _scale);
 			gr.setColor(Color.blue);
-			gr.fillOval(_centerX + (int)(x/_scale), _centerY + (int)(y/_scale) , 10, 10);//Radio 5 diametro 10
-			gr.drawString(b.getId(), _centerX + (int)(x/_scale) ,  _centerY + (int)(y/_scale) );//Habria que ajustar un poco
+			gr.fillOval(x - radius,  y - radius, radius * 2, radius * 2);//FillOval se utiliza x , y como izq-sup pero lo queremos es en central
+			
+			gr.drawString(b.getId(), x - radius ,  y - radius);//Habria que ajustar un poco
 			if(_showVectors) {
-				int forceX = (int) b.getForce().getX();
-				int forceY = (int) b.getForce().getY();
+				//No recomentaria usar directamente el vector , porque puede lleva un valor enorme.
+				Vector2D force = b.getForce().direction().scale(20);
+				Vector2D velocity = b.getVelocity().direction().scale(20);
+				//Se puede ajusta un poco mas
+				drawLineWithArrow(gr, x , y , x + (int)force.getX(), y - (int)force.getY(), 5, 8, Color.red, Color.RED);
+				drawLineWithArrow(gr, x , y , x + (int)velocity.getX(), y - (int)velocity.getY(), 5, 8, Color.yellow, Color.yellow);
 				
-				int velocityX = (int) b.getVelocity().getX();
-				int velocityY = (int) b.getVelocity().getY();
-				//drawLineWithArrow(g, x, y, ..., ..., 2, 3, Color.red, Color.red);
-				//drawLineWithArrow(g, x, y, ..., ..., 2, 3, Color.red, Color.red);
+				//Para que pinte un poco mejor
+				gr.setColor(Color.blue);
+				gr.fillOval(x - radius,  y - radius, radius * 2, radius * 2);
 			}
 		}
 		// TODO draw help if _showHelp is true
