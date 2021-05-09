@@ -42,12 +42,16 @@ public class StatusBar extends JPanel implements SimulatorObserver {
 		_currLaws = new JLabel(LAWS + "Newton Gravitation with G : ....");
 		
 		toolBar.add(_currTime);
-		toolBar.addSeparator();
 		toolBar.add(Box.createGlue());
 		toolBar.addSeparator();
+		
 		toolBar.add(_numOfBodies);
+		toolBar.add(Box.createGlue());
 		toolBar.addSeparator();
+		
 		toolBar.add(_currLaws);
+		
+		toolBar.setFloatable(false);
 		this.add(toolBar);
 	}
 	// other private/protected methods

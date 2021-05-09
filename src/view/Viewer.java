@@ -41,7 +41,7 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 	//
 	private static final int RADIUS = 5; 
 	
-	private static final String HELP_MSG = "h: toggle help, v: toggle vector, +: zoom in, -: zoom out, =: fir";
+	private static final String HELP_MSG = "h: toggle help, v: toggle vectors, +: zoom in, -: zoom out, =: fir";
 	private static final Color VEL_COLOR = new Color(0, 180, 0);//Verde oscuro (cuanto mas bajo el numero, mas oscuro el color)
 	private static final Color FORCE_COLOR = Color.RED;
 	private static final Color BODY_COLOR = Color.BLUE;

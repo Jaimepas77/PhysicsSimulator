@@ -221,10 +221,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int op = JOptionPane.showConfirmDialog(exitButton, "Salir", "Ventana de Confirmacion", JOptionPane.YES_NO_OPTION);
-				if(op == JOptionPane.YES_OPTION) {
-					System.exit(0);
-				}
+				quit();
 			}
 		});
 	}
@@ -299,5 +296,12 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		exitButton.setEnabled(value);
 		deltaTime.setEnabled(value);
 		steps.setEnabled(value);
+	}
+	
+	protected void quit() {
+		int op = JOptionPane.showConfirmDialog(exitButton, "Salir", "Ventana de Confirmacion", JOptionPane.YES_NO_OPTION);
+		if(op == JOptionPane.YES_OPTION) {
+			System.exit(0);
+		}
 	}
 }
