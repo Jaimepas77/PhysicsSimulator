@@ -161,7 +161,7 @@ public class Main {
 		
 		// execute mode
 		cmdLineOptions.addOption(Option.builder("m").longOpt("mode").hasArg()
-				.desc("Excution Mode.Posible values: 'Batch'Bacth mode, 'Gui' GUI mode.Default values: Batch")
+				.desc("Excution Mode. Posible values: 'batch' (Bacth mode), 'gui' (Graphical User Interface mode). Default value: Batch")
 				.build());
 
 		return cmdLineOptions;
@@ -194,9 +194,6 @@ public class Main {
 
 	private static void parseInFileOption(CommandLine line) throws ParseException {
 		_inFile = line.getOptionValue("i");
-		if (_inFile == null) {
-			throw new ParseException("In batch mode an input file of bodies is required");
-		}
 	}
 
 	private static void parseDeltaTimeOption(CommandLine line) throws ParseException {
@@ -295,6 +292,10 @@ public class Main {
 
 	private static void startBatchMode() throws Exception {
 		// complete this method
+		if (_inFile == null) {//Como en el Batch mode el parametro de entrada es obligatorio, si se omite hay que lanzar error y cancelar la ejecución
+			System.err.println("In batch mode an input file of bodies is required");
+			System.exit(1);
+		}
 		InputStream is = new FileInputStream(new File(_inFile));
 		OutputStream os = _outFile == null ? 
 				System.out : new FileOutputStream(new File(_outFile));
@@ -330,18 +331,19 @@ public class Main {
 		PhysicsSimulator simulator = new PhysicsSimulator(_dtime, _forceLawsFactory.createInstance(_forceLawsInfo));
 		Controller controller = new Controller(simulator, _bodyFactory,_forceLawsFactory);
 		
-		//Es opcional i y otros se ignoran
-		if(_inFile != null) {
-			InputStream is = new FileInputStream(new File(_inFile));
-			controller.loadBodies(is);
-		}
-		
 		SwingUtilities.invokeAndWait(new Runnable() {
 			@Override
 			public void run() {
 				new MainWindow(controller);
 			}
 		});
+		
+		//Es opcional i y otros se ignoran
+		if(_inFile != null) {
+			InputStream is = new FileInputStream(new File(_inFile));
+			controller.loadBodies(is);
+		}
+		
 		
 	}
 
