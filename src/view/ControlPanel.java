@@ -161,16 +161,14 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 			public void actionPerformed(ActionEvent e) {//Hay que usar table.
 				//controller.setForceLaws(info);
 
-				JComboBox comboBox = new JComboBox(); 
-				List<JSONObject> laws = controller.getForceLawsInfo();
-
-				for(JSONObject o : laws) {
-					comboBox.addItem(o.getString("desc"));
-				}
+				new LawConfDialog(controller.getForceLawsInfo());
 			}
+
+			
 		}
 		);
 	}
+	
 	
 	private void initRunButton() {
 		runButton  = new JButton(new ImageIcon("resources/icons/run.png"));
