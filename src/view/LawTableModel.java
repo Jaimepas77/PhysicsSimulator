@@ -14,21 +14,13 @@ public class LawTableModel extends AbstractTableModel {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String[] columns = {"Key","Value","Description"};
-	private JSONObject law;
+	private String[] columns = {"Key", "Value", "Description"};
+	private JSONObject lawData;
 	private List<String> keys;
 	private List<String> values;
 	
 	public LawTableModel(JSONObject law){
-		this.law = law;
-		
-		keys = new ArrayList<String>();
-		values = new ArrayList<String>();
-		for(String s : law.keySet()) {
-			keys.add(s);
-			values.add("");
-		}
-		
+		update(law);
 	}
 	
 	@Override
@@ -38,7 +30,7 @@ public class LawTableModel extends AbstractTableModel {
 	
 	@Override
 	public int getRowCount() {
-		return law.length();
+		return lawData.length();
 	}
 
 	@Override
@@ -55,18 +47,37 @@ public class LawTableModel extends AbstractTableModel {
 			case 1:
 				return values.get(rowIndex); 
 			case 2:
-				return law.get(key);
+				return lawData.get(key);
 		}
 		return null;
 	}
 	
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		if(rowIndex == 1) {
+		if(columnIndex == 1) {
 			return true;
 		}
-		return false;
+		else {
+			return false;
+		}
 	}
 	
+	@Override
+	public void setValueAt(Object value, int row, int col) {
+		values.set(row, (String)value);
+	}
+	
+	public void update(JSONObject law) {
+		lawData = law.getJSONObject("data");
+		
+		keys = new ArrayList<String>();
+		values = new ArrayList<String>();
+		for(String s : lawData.keySet()) {
+			keys.add(s);
+			values.add("");
+		}
+		
+		fireTableStructureChanged();
+	}
 
 }
