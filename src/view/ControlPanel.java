@@ -154,14 +154,20 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	private void initLawConfButton() {
 
 		lawConfButton = new JButton(new ImageIcon("resources/icons/physics.png"));//Ambas formas valdrian
-		lawConfButton.setToolTipText("Seleccionar ley de gravitación");
-		
+		lawConfButton.setToolTipText("Seleccionar ley de gravitaci¨®n");
 		lawConfButton.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {//Hay que usar table.
-				//controller.setForceLaws(info);
-
-				new LawConfDialog(controller.getForceLawsInfo());
+			public void actionPerformed(ActionEvent e) {
+				LawConfDialog lawDialog = new LawConfDialog(null,controller.getForceLawsInfo());
+				int i = lawDialog.getStatus();
+				if(i == 1){
+					try {
+						JSONObject info = lawDialog.getJSON();
+						controller.setForceLaws(info);
+					}catch(Exception error){
+						JOptionPane.showMessageDialog(null, error.getMessage());
+					}
+				}
 			}
 
 			
