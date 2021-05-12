@@ -77,6 +77,7 @@ public class MainWindow extends JFrame{
 			}
 		});
 		
+		setMinimumSize(new Dimension(650, 500));
 		pack();
 		setVisible(true);
 	}

@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.List;
 
@@ -32,30 +34,36 @@ public class StatusBar extends JPanel implements SimulatorObserver {
 		controller.addObserver(this);
 	}
 	private void initGUI() {
-		this.setLayout( new FlowLayout( FlowLayout.LEFT ));
-		this.setBorder( BorderFactory.createBevelBorder( 1 ));
-	// TODO complete the code to build the tool bar
-		JToolBar toolBar = new JToolBar();
+		BoxLayout boxLay = new BoxLayout(this, BoxLayout.X_AXIS);//El box layout ditribuye bien usando el Glue
+		this.setLayout(boxLay);
+		this.setBorder(BorderFactory.createBevelBorder(1));
+		
 		//Por defecto
 		_currTime = new JLabel(TIME + "0.0");
 		_numOfBodies = new JLabel(BODIES + "0");
 		_currLaws = new JLabel(LAWS + "Newton Gravitation with G : ....");
 		
-		toolBar.add(_currTime);
-		toolBar.add(Box.createGlue());
-		toolBar.addSeparator();
+		this.add(_currTime);
 		
-		toolBar.add(_numOfBodies);
-		toolBar.add(Box.createGlue());
-		toolBar.addSeparator();
+		this.add(Box.createGlue());
+		this.add(separator());
 		
-		toolBar.add(_currLaws);
+		this.add(_numOfBodies);
 		
-		toolBar.setFloatable(false);
-		this.add(toolBar);
+		this.add(Box.createGlue());
+		this.add(separator());
+		
+		this.add(_currLaws);
 	}
 	// other private/protected methods
-	// ...
+	
+	private JSeparator separator() {//Separator estándar para usar
+		JSeparator s = new JSeparator(JSeparator.VERTICAL);
+		s.setForeground(Color.GRAY);
+		s.setMaximumSize(new Dimension(1, 11));
+		return s;
+	}
+	
 	private void updateBodies(List<Body> bodies) {
 		_numOfBodies.setText(BODIES + bodies.size());
 	}
