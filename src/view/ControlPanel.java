@@ -1,21 +1,13 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 
 import javax.swing.*;
@@ -71,13 +63,13 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		
 		toolBar = new JToolBar();
 		
-		//Boton de seleccion de fichero
+		//Boton de selecci贸n de fichero
 		initFileButton();//ToDo
 		toolBar.add(fileButton);
 		
 		toolBar.addSeparator();
 		
-		//Boton de selecci髇 de la ley gravitacional
+		//Boton de selecci贸n de la ley gravitacional
 		initLawConfButton();//ToDo
 		toolBar.add(lawConfButton);
 		
@@ -91,8 +83,8 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		initPauseButton();
 		toolBar.add(pauseButton);
 		
-		//Spinner de seleccion del numero de pasos a ejecutar
-		steps = new JSpinner(new SpinnerNumberModel(10, 1, 100000, 1));//Al JUGAR
+		//Spinner de selecci贸n del n煤mero de pasos a ejecutar
+		steps = new JSpinner(new SpinnerNumberModel(10000, 1, 100000, 100));//Al JUGAR
 		steps.setMaximumSize(new Dimension(80, 40));
 		steps.setPreferredSize(new Dimension(80, 40));
 		JLabel stepLabel= new JLabel("Steps: ");
@@ -117,11 +109,11 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		initExitButton();
 		toolBar.add(exitButton);
 		
-		this.add(toolBar);//No hace falta especificar la ubicaci髇 en el layout porque s髄o se inserta un elemento (y el borderLayout s髄o se usa para que redimensione bien.)
+		this.add(toolBar);//No hace falta especificar la ubicaci贸n en el layout porque s贸lo se inserta un elemento (y el borderLayout s贸lo se usa para que redimensione bien.)
 	}
 	
 	private void initFileButton() {
-		fileButton = new JButton(new ImageIcon("resources\\icons\\open.png"));//Completar dir、
+		fileButton = new JButton(new ImageIcon("resources\\icons\\open.png"));//Completar dir
 		fileButton.setToolTipText("Seleccionar fichero fuente");
 		
 		fileChooser = new JFileChooser();//Se inicializa el fileChooser que luego se empleara cada vez que se pulse el boton
@@ -154,7 +146,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	private void initLawConfButton() {
 
 		lawConfButton = new JButton(new ImageIcon("resources/icons/physics.png"));//Ambas formas valdrian
-		lawConfButton.setToolTipText("Seleccionar ley de gravitación");
+		lawConfButton.setToolTipText("Seleccionar ley de gravitaci贸n");
 		lawConfButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -189,7 +181,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 				
 				stopped = false;
 				try {
-					controller.setStepTime(Double.parseDouble(deltaTime.getText()));//Se ajusta el delta time seg鷑 ha especificado el usuario (stepTime = deltaTime)
+					controller.setStepTime(Double.parseDouble(deltaTime.getText()));//Se ajusta el delta time seg锟絥 ha especificado el usuario (stepTime = deltaTime)
 
 					run_sim((int)steps.getValue());
 				}
@@ -303,7 +295,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	}
 	
 	protected void quit() {
-		int op = JOptionPane.showConfirmDialog(exitButton, "Salir", "Ventana de Confirmacion", JOptionPane.YES_NO_OPTION);
+		int op = JOptionPane.showConfirmDialog(exitButton, "驴Seguro que quieres salir?", "Ventana de confirmaci贸n", JOptionPane.YES_NO_OPTION);
 		if(op == JOptionPane.YES_OPTION) {
 			System.exit(0);
 		}
