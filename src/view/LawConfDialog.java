@@ -24,7 +24,7 @@ public class LawConfDialog extends JDialog {
 	private static final String TITLE = "Force Laws Selection";
 	private static final String INFO = "<html><p>Select a force law and provide values for the parametes in the <b>Value column</b> (default values are used for parametes with no value).</p></html>";
 	
-	public int status;//Estado de JDialog (0 : cancel , 1 :ok)
+	public int status;//Estado de JDialog (0: cancel , 1: ok)
 	//ComboBox
 	private JComboBox<String> lawsComboBox;
 	private DefaultComboBoxModel<String> lawModel;
@@ -45,10 +45,9 @@ public class LawConfDialog extends JDialog {
 	//ButtonPanel
 	private JPanel buttonPanel;
 	
-	public LawConfDialog(JFrame frame,List<JSONObject> laws) {
+	public LawConfDialog(JFrame frame, List<JSONObject> laws) {
 		
 		super(frame, true);
-		this.laws = new ArrayList<JSONObject>();
 		this.laws = laws;
 		
 		lawModel = new DefaultComboBoxModel<>();
@@ -80,8 +79,8 @@ public class LawConfDialog extends JDialog {
 		//ButtonPanel
 		initButtonPanel();
 		mainPanel.add(buttonPanel);
-		setVisible(false);
 		
+		setVisible(false);
 	}
 	
 	private void initInfoLabel() {
@@ -120,24 +119,22 @@ public class LawConfDialog extends JDialog {
 		
 		JButton okButton = new JButton("ok");
 		okButton.addActionListener(new ActionListener(){
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				status = 1;
 				LawConfDialog.this.setVisible(false);
-				
-			}});
+			}
+		});
 		
 		JButton cancelButton = new JButton("cancel");
 		cancelButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				status = 0;
 				LawConfDialog.this.setVisible(false);
-				
-			}});
-		
+			}
+		});
+
 		buttonPanel.add(okButton);
 		buttonPanel.add(cancelButton);
 	}
@@ -149,7 +146,7 @@ public class LawConfDialog extends JDialog {
 	public int getStatus() {
 		
 		pack();
-		setVisible(true);
+		setVisible(true);//Mostrar al usuario para que elija
 		return status;
 	}
 }

@@ -38,6 +38,9 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	//Selector de ficheros
 	private JFileChooser fileChooser;
 	
+	//Selector de fuerza gravitacional
+	LawConfDialog lawDialog;
+	
 	//ToolBar
 	private JToolBar toolBar;
 	
@@ -146,13 +149,17 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		lawConfButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				LawConfDialog lawDialog = new LawConfDialog(null,controller.getForceLawsInfo());
-				int i = lawDialog.getStatus();
-				if(i == 1){
+				if(lawDialog == null) {//Crear si no se ha creado aún
+					lawDialog = new LawConfDialog(null, controller.getForceLawsInfo());
+				}
+				
+				int i = lawDialog.getStatus();//Obtener la info del usuario
+				if(i == 1) {
 					try {
 						JSONObject info = lawDialog.getJSON();
 						controller.setForceLaws(info);
-					}catch(Exception error){
+					}
+					catch(Exception error) {
 						JOptionPane.showMessageDialog(null, error.getMessage());
 					}
 				}
