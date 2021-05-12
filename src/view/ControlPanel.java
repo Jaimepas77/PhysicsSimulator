@@ -28,9 +28,6 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	private Controller controller;
 	private boolean stopped;
 	
-	//Observador
-	private double realTime;
-	
 	//Buttons
 	private JButton fileButton;
 	private JButton lawConfButton;
@@ -94,12 +91,11 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		toolBar.addSeparator();
 		
 		//TextField del DeltaTime
-		JLabel delta = new JLabel("Delta-Time: ");
+		JLabel deltaLabel = new JLabel("Delta-Time: ");
 		deltaTime = new JTextField();
 		deltaTime.setColumns(4);
 		deltaTime.setMaximumSize(deltaTime.getPreferredSize());//Para que mantenga una distacia con exitButton
-		deltaTime.setText(realTime + "");
-		toolBar.add(delta);
+		toolBar.add(deltaLabel);
 		toolBar.add(deltaTime);
 		
 		toolBar.add(Box.createGlue());//Pegamento para la redimension
@@ -161,8 +157,6 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 					}
 				}
 			}
-
-			
 		}
 		);
 	}
@@ -181,7 +175,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 				
 				stopped = false;
 				try {
-					controller.setStepTime(Double.parseDouble(deltaTime.getText()));//Se ajusta el delta time seg�n ha especificado el usuario (stepTime = deltaTime)
+					controller.setStepTime(Double.parseDouble(deltaTime.getText()));//Se ajusta el delta time según ha especificado el usuario (stepTime = deltaTime)
 
 					run_sim((int)steps.getValue());
 				}
@@ -252,12 +246,12 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 
 	@Override
 	public void onRegister(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		updateDeltaTime(time);
+		deltaTime.setText(dt + "");
 	}
 
 	@Override
 	public void onReset(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		updateDeltaTime(time);
+		deltaTime.setText(dt + "");
 	}
 
 	@Override
@@ -270,16 +264,11 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 
 	@Override
 	public void onDeltaTimeChanged(double dt) {
-		updateDeltaTime(dt);
+		deltaTime.setText(dt + "");
 	}
 
 	@Override
 	public void onForceLawsChanged(String fLawsDesc) {
-	}
-	
-	private void updateDeltaTime(double time) {//Actualiza el tiempo por paso de ejecucion (el delta-time)
-		this.realTime = time;
-		deltaTime.setText(realTime + "");
 	}
 	
 	private void buttonEnable(boolean value) {
