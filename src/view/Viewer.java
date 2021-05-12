@@ -25,7 +25,7 @@ import simulator.misc.Vector2D;
 import simulator.model.Body;
 import simulator.model.SimulatorObserver;
 
-public class Viewer extends JComponent implements SimulatorObserver {//Hereda de Jcomponent or JPanel
+public class Viewer extends JComponent implements SimulatorObserver {
 	/**
 	 * 
 	 */
@@ -42,7 +42,7 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 	private static final int RADIUS = 5; 
 	
 	private static final String HELP_MSG = "h: toggle help, v: toggle vectors, +: zoom in, -: zoom out, =: fir";
-	private static final Color VEL_COLOR = new Color(0, 180, 0);//Verde oscuro (cuanto mas bajo el numero, mas oscuro el color)
+	private static final Color VEL_COLOR = new Color(0, 180, 0);//Verde oscuro (cuanto más bajo el número, más oscuro el color)
 	private static final Color FORCE_COLOR = Color.RED;
 	private static final Color BODY_COLOR = Color.BLUE;
 	
@@ -52,9 +52,7 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 	}
 	
 	private void initGUI() {
-		// TODO add border with title
-		//Configuracion de panel
-		this.setLayout(new BorderLayout());
+		//border with title
 		this.setBorder(BorderFactory.createTitledBorder(
 				BorderFactory.createLineBorder(Color.black, 2),
 				"Viewer",
@@ -96,14 +94,9 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 
 			@Override
 			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
-
 			}
-
 			@Override
 			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-
 			}
 		});
 		addMouseListener(new MouseListener() {
@@ -115,26 +108,15 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
 			}
-
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
 			}
-
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
 			}
-
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-
 			}
 		});
 	}
@@ -148,53 +130,66 @@ public class Viewer extends JComponent implements SimulatorObserver {//Hereda de
 		
 		gr.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
-
 		gr.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
 				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		
 		// calculate the center
 		_centerX = getWidth() / 2;
 		_centerY = getHeight() / 2;
-		// TODO draw a cross at center
+		
+		// draw a cross at center
+		drawCross(gr);
+		
+		// draw bodies (with vectors if _showVectors is true)
+		drawBodies(gr);
+		
+		//draw help if _showHelp is true
+		if(_showHelp) {
+			drawHelp(gr);
+		}
+	}
+
+	private void drawCross(Graphics2D gr) {
 		gr.setColor(Color.red);
 		gr.drawLine(_centerX - 5, _centerY, _centerX + 5, _centerY);
 		gr.drawLine(_centerX, _centerY- 5, _centerX, _centerY + 5);
-		// TODO draw bodies (with vectors if _showVectors is true)
+	}
+
+	private void drawBodies(Graphics2D gr) {
+
 		for (Body b : _bodies) {
-			//Circulo del cuerpo
+			//Círculo del cuerpo
 			int x = _centerX + (int)(b.getPosition().getX() / _scale);
 			int y = _centerY - (int)(b.getPosition().getY() / _scale);
 			gr.setColor(BODY_COLOR);
-			gr.fillOval(x - RADIUS,  y - RADIUS, RADIUS * 2, RADIUS * 2);//FillOval se utiliza x , y como izq-sup pero lo queremos es en central
+			gr.fillOval(x - RADIUS,  y - RADIUS, RADIUS * 2, RADIUS * 2);//FillOval se utiliza x, y como izq-sup pero lo queremos es en central
 			
 			//Nombre del cuerpo
 			gr.setColor(Color.BLACK);
-			gr.drawString(b.getId(), x - RADIUS,  y - RADIUS);//Habria que ajustar un poco
+			gr.drawString(b.getId(), x - RADIUS,  y - RADIUS);//Habría que ajustar un poco
 			
 			if(_showVectors) {
-				//No recomentaria usar directamente el vector, porque puede lleva un valor enorme.
+				//No usar directamente el vector, porque puede llevar un valor enorme.
 				Vector2D force = b.getForce().direction().scale(20);
 				Vector2D velocity = b.getVelocity().direction().scale(20);
-				//Se puede ajusta un poco mas
-				drawLineWithArrow(gr, x , y , x + (int)force.getX(), y - (int)force.getY(), 4, 4, FORCE_COLOR, FORCE_COLOR);
-				drawLineWithArrow(gr, x , y , x + (int)velocity.getX(), y - (int)velocity.getY(), 4, 4, VEL_COLOR, VEL_COLOR);
+				//Se puede ajusta un poco más
+				drawLineWithArrow(gr, x, y, x + (int)force.getX(), y - (int)force.getY(), 4, 4, FORCE_COLOR, FORCE_COLOR);
+				drawLineWithArrow(gr, x, y, x + (int)velocity.getX(), y - (int)velocity.getY(), 4, 4, VEL_COLOR, VEL_COLOR);
 				
 				//Para que pinte un poco mejor
 				gr.setColor(BODY_COLOR);
 				gr.fillOval(x - RADIUS,  y - RADIUS, RADIUS * 2, RADIUS * 2);
 			}
 		}
-		// TODO draw help if _showHelp is true
-		if(_showHelp) {
-			//A ajustar
-			gr.setColor(Color.red);
-			gr.drawString(HELP_MSG, 10, 25);
-			gr.drawString("Scaling ratio: " + String.valueOf(_scale), 10, 42);
-		}
 	}
 	
-	// other private/protected methods
-	// ...
+	private void drawHelp(Graphics2D gr) {
+		//A ajustar
+		gr.setColor(Color.red);
+		gr.drawString(HELP_MSG, 10, 25);
+		gr.drawString("Scaling ratio: " + String.valueOf(_scale), 10, 42);
+	}
+
 	private void autoScale() {
 		double max = 1.0;
 		for (Body b : _bodies) {
