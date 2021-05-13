@@ -24,7 +24,8 @@ public class LawConfDialog extends JDialog {
 	private static final String TITLE = "Force Laws Selection";
 	private static final String INFO = "<html><p>Select a force law and provide values for the parametes in the <b>Value column</b> (default values are used for parametes with no value).</p></html>";
 	
-	public int status;//Estado de JDialog (0: cancel , 1: ok)
+	private int index; 
+	private int status;//Estado de JDialog (0: cancel , 1: ok)
 	//ComboBox
 	private JComboBox<String> lawsComboBox;
 	private DefaultComboBoxModel<String> lawModel;
@@ -61,6 +62,9 @@ public class LawConfDialog extends JDialog {
 	private void initGUI() {
 		setTitle(TITLE);
 		status = 0;
+		index = 0;
+		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		this.setContentPane(mainPanel);
@@ -90,7 +94,7 @@ public class LawConfDialog extends JDialog {
 	
 	private void initLawTable() {
 		//Tabla de Configuracion
-		lawTableModel = new LawTableModel(laws.get(0));
+		lawTableModel = new LawTableModel(laws.get(index));
 		lawTable = new JTable(lawTableModel);
 	}
 	
@@ -99,15 +103,8 @@ public class LawConfDialog extends JDialog {
 		lawsComboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(lawsComboBox.getSelectedItem().equals(laws.get(0).getString("desc"))) {
-					lawTableModel.update(laws.get(0));
-				}
-				else if(lawsComboBox.getSelectedItem().equals(laws.get(1).getString("desc"))) {
-					lawTableModel.update(laws.get(1));
-				}
-				else if(lawsComboBox.getSelectedItem().equals(laws.get(2).getString("desc"))) {
-					lawTableModel.update(laws.get(2));
-				}
+				index = lawsComboBox.getSelectedIndex();
+				lawTableModel.update(laws.get(index));
 			}
 		}
 		);
@@ -144,7 +141,6 @@ public class LawConfDialog extends JDialog {
 	}
 	
 	public int getStatus() {
-		
 		pack();
 		setVisible(true);//Mostrar al usuario para que elija
 		return status;
