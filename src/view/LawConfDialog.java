@@ -2,9 +2,12 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.json.JSONObject;
 
@@ -36,6 +39,10 @@ public class LawConfDialog extends JDialog {
 	
 	//ButtonPanel
 	private JPanel buttonPanel;
+	
+	//Private
+	private JList lawList;
+	private ListModel listModel;
 	
 	public LawConfDialog(JFrame frame, List<JSONObject> laws) {
 		
@@ -70,6 +77,9 @@ public class LawConfDialog extends JDialog {
 		//ComboBox
 		initLawComboBox();
 		mainPanel.add(lawsComboBox);
+		
+		//JList
+		initLawList();
 		
 		//ButtonPanel
 		initButtonPanel();
@@ -125,6 +135,26 @@ public class LawConfDialog extends JDialog {
 
 		buttonPanel.add(okButton);
 		buttonPanel.add(cancelButton);
+	}
+	
+	private void initLawList() {
+		DefaultListModel listModel = new DefaultListModel<String>();
+		for(JSONObject o : this.laws) {
+			listModel.addElement(o.getString("desc"));
+		}
+		lawList = new JList<String>(listModel);
+		lawList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		lawList.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				lawTableModel.update(laws.get(lawList.getSelectedIndex()));
+			}
+			}
+		);
+		
+		mainPanel.add(new JScrollPane(lawList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
+		
 	}
 	
 	public JSONObject getJSON() {
