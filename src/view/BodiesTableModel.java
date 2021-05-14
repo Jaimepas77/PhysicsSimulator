@@ -10,9 +10,7 @@ import simulator.model.Body;
 import simulator.model.SimulatorObserver;
 
 public class BodiesTableModel extends AbstractTableModel implements SimulatorObserver{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	
 	private String[] columns = {"Id", "Mass", "Position", "Velocity", "Force"};
@@ -21,10 +19,10 @@ public class BodiesTableModel extends AbstractTableModel implements SimulatorObs
 	//Contructores
 	public BodiesTableModel(Controller controller) {
 		bodies = new ArrayList<>();
-		controller.addObserver(this); //Para prueba
+		controller.addObserver(this);
 	}
 	
-	//Metodos a ser un TableModel
+	//Métodos a ser un TableModel
 	@Override
 	public int getRowCount() {
 		return bodies == null ? 0 : bodies.size();
@@ -65,29 +63,29 @@ public class BodiesTableModel extends AbstractTableModel implements SimulatorObs
 		return value;
 	}
 	
-	//Metodos por ser un observador
-	public void setBodies(List<Body> bodies) {
+	//Métodos por ser un observador
+	private void updateBodies(List<Body> bodies) {
 		this.bodies = bodies;
 		fireTableStructureChanged();//Notificar los cambios realizados
 	}
 	@Override
 	public void onRegister(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		setBodies(bodies);	
+		updateBodies(bodies);	
 	}
 	
 	@Override
 	public void onReset(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		setBodies(bodies);
+		updateBodies(bodies);
 	}
 	
 	@Override
 	public void onBodyAdded(List<Body> bodies, Body b) {
-		setBodies(bodies);
+		updateBodies(bodies);
 	}
 	
 	@Override
 	public void onAdvance(List<Body> bodies, double time) {
-		setBodies(bodies);
+		updateBodies(bodies);
 	}
 	
 	@Override

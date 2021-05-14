@@ -1,8 +1,6 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -14,10 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import simulator.control.Controller;
@@ -26,9 +21,7 @@ import simulator.model.Body;
 import simulator.model.SimulatorObserver;
 
 public class Viewer extends JComponent implements SimulatorObserver {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	// ...
 	private int _centerX;
@@ -158,16 +151,11 @@ public class Viewer extends JComponent implements SimulatorObserver {
 	private void drawBodies(Graphics2D gr) {
 
 		for (Body b : _bodies) {
-			//Círculo del cuerpo
+			//Posición del cuerpo
 			int x = _centerX + (int)(b.getPosition().getX() / _scale);
 			int y = _centerY - (int)(b.getPosition().getY() / _scale);
-			gr.setColor(BODY_COLOR);
-			gr.fillOval(x - RADIUS,  y - RADIUS, RADIUS * 2, RADIUS * 2);//FillOval se utiliza x, y como izq-sup pero lo queremos es en central
 			
-			//Nombre del cuerpo
-			gr.setColor(Color.BLACK);
-			gr.drawString(b.getId(), x - RADIUS,  y - RADIUS);//Habría que ajustar un poco
-			
+			//Vector
 			if(_showVectors) {
 				//No usar directamente el vector, porque puede llevar un valor enorme.
 				Vector2D force = b.getForce().direction().scale(20);
@@ -175,16 +163,19 @@ public class Viewer extends JComponent implements SimulatorObserver {
 				//Se puede ajusta un poco más
 				drawLineWithArrow(gr, x, y, x + (int)force.getX(), y - (int)force.getY(), 4, 4, FORCE_COLOR, FORCE_COLOR);
 				drawLineWithArrow(gr, x, y, x + (int)velocity.getX(), y - (int)velocity.getY(), 4, 4, VEL_COLOR, VEL_COLOR);
-				
-				//Para que pinte un poco mejor
-				gr.setColor(BODY_COLOR);
-				gr.fillOval(x - RADIUS,  y - RADIUS, RADIUS * 2, RADIUS * 2);
 			}
+			
+			//Círculo del cuerpo
+			gr.setColor(BODY_COLOR);
+			gr.fillOval(x - RADIUS,  y - RADIUS, RADIUS * 2, RADIUS * 2);//FillOval se utiliza x, y como izq-sup pero lo queremos es en central
+			
+			//Nombre del cuerpo
+			gr.setColor(Color.BLACK);
+			gr.drawString(b.getId(), x - RADIUS,  y - RADIUS);//Habría que ajustar un poco
 		}
 	}
 	
 	private void drawHelp(Graphics2D gr) {
-		//A ajustar
 		gr.setColor(Color.red);
 		gr.drawString(HELP_MSG, 10, 25);
 		gr.drawString("Scaling ratio: " + String.valueOf(_scale), 10, 42);

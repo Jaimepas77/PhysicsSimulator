@@ -21,7 +21,6 @@ import org.apache.commons.cli.ParseException;
 import org.json.JSONObject;
 
 import simulator.control.Controller;
-import simulator.control.MassEqualStates;
 import simulator.control.StateComparator;
 import simulator.factories.*;
 import simulator.model.Body;
@@ -37,7 +36,7 @@ public class Main {
 	private final static String _forceLawsDefaultValue = "nlug";
 	private final static String _stateComparatorDefaultValue = "epseq";
 	private final static Integer _defaultStep = 150;
-	private final static String _defaultMode = "Batch";
+	private final static String _defaultMode = "batch";
 
 	// some attributes to stores values corresponding to command-line parameters
 	//
@@ -96,7 +95,7 @@ public class Main {
 			parseDeltaTimeOption(line);
 			parseForceLawsOption(line);
 			parseStateComparatorOption(line);
-			//add support of -m //TODO
+			//add support of -m 
 			parseModeOption(line);
 
 			// if there are some remaining arguments, then something wrong is
@@ -226,14 +225,15 @@ public class Main {
 		
 	}
 	
-	private static void parseModeOption(CommandLine line) throws ParseException {//TODO
-		String dm = line.getOptionValue("m",_defaultMode).toLowerCase();
+	private static void parseModeOption(CommandLine line) throws ParseException {
+		String dm = line.getOptionValue("m", _defaultMode).toLowerCase();
 		
 		if(!dm.equals("batch") && !dm.equals("gui")) {
-			throw new ParseException("Invalida excute mode: " + dm);
+			throw new ParseException("Invalid excution mode: " + dm);
 		}
-		_mode = dm;
-		
+		else{
+			_mode = dm;
+		}
 	}
 
 	private static JSONObject parseWRTFactory(String v, Factory<?> factory) {
@@ -292,7 +292,7 @@ public class Main {
 
 	private static void startBatchMode() throws Exception {
 		// complete this method
-		if (_inFile == null) {//Como en el Batch mode el parametro de entrada es obligatorio, si se omite hay que lanzar error y cancelar la ejecución
+		if (_inFile == null) {//Como en el Batch mode el parametro de entrada es obligatorio, si se omite hay que lanzar error y cancelar la ejecuciï¿½n
 			System.err.println("In batch mode an input file of bodies is required");
 			System.exit(1);
 		}

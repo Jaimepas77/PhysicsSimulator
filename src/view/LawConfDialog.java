@@ -1,31 +1,22 @@
 package view;
 
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
 
 import org.json.JSONObject;
 
-import simulator.model.ForceLaws;
-
 public class LawConfDialog extends JDialog {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private static final String TITLE = "Force Laws Selection";
 	private static final String INFO = "<html><p>Select a force law and provide values for the parametes in the <b>Value column</b> (default values are used for parametes with no value).</p></html>";
 	
 	private int index; 
-	private int status;//Estado de JDialog (0: cancel , 1: ok)
+	private int status;//Estado de JDialog (0: cancel, 1: ok)
 	//ComboBox
 	private JComboBox<String> lawsComboBox;
 	private DefaultComboBoxModel<String> lawModel;
@@ -112,7 +103,7 @@ public class LawConfDialog extends JDialog {
 	
 	private void initButtonPanel() {
 		buttonPanel = new JPanel();
-		buttonPanel.setAlignmentX(CENTER_ALIGNMENT);;
+		buttonPanel.setAlignmentX(CENTER_ALIGNMENT);
 		
 		JButton okButton = new JButton("ok");
 		okButton.addActionListener(new ActionListener(){

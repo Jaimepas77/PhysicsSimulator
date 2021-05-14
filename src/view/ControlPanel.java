@@ -21,9 +21,6 @@ import simulator.model.SimulatorObserver;
 
 public class ControlPanel extends JPanel implements SimulatorObserver{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private Controller controller;
 	private boolean stopped;
@@ -44,7 +41,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	//ToolBar
 	private JToolBar toolBar;
 	
-	//Spinner & observador
+	//Spinner
 	private JSpinner steps;//Contiene el numero de pasos a ejecutar
 	
 	JTextField deltaTime;//Campo de texto en el que se introduce el tiempo por paso
@@ -52,7 +49,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	
 	ControlPanel(Controller controller){
 		this.controller = controller;
-		stopped = false;//true;
+		stopped = false;
 		initGUI();
 		controller.addObserver(this);
 	}
@@ -63,28 +60,28 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		
 		toolBar = new JToolBar();
 		
-		//Boton de selección de fichero
-		initFileButton();//ToDo
+		//Botón de selección de fichero
+		initFileButton();
 		toolBar.add(fileButton);
 		
 		toolBar.addSeparator();
 		
-		//Boton de selección de la ley gravitacional
-		initLawConfButton();//ToDo
+		//Botón de selección de la ley gravitacional
+		initLawConfButton();
 		toolBar.add(lawConfButton);
 		
 		toolBar.addSeparator();
 		
-		//Boton de reproducir (play)
-		initRunButton();//ToDo
+		//Botón de reproducir (play)
+		initRunButton();
 		toolBar.add(runButton);
 		
-		//Boton de pausa
+		//Botón de pausa
 		initPauseButton();
 		toolBar.add(pauseButton);
 		
 		//Spinner de selección del número de pasos a ejecutar
-		steps = new JSpinner(new SpinnerNumberModel(10000, 1, 100000, 100));//Al JUGAR
+		steps = new JSpinner(new SpinnerNumberModel(10000, 1, 100000, 100));
 		steps.setMaximumSize(new Dimension(80, 40));
 		steps.setPreferredSize(new Dimension(80, 40));
 		JLabel stepLabel= new JLabel("Steps: ");
@@ -104,7 +101,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		toolBar.add(Box.createGlue());//Pegamento para la redimension
 		toolBar.addSeparator();
 		
-		//Boton de apagar
+		//Botón de apagar
 		initExitButton();
 		toolBar.add(exitButton);
 		
@@ -128,7 +125,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 					File file = fileChooser.getSelectedFile();
 					try {
 						InputStream is = new FileInputStream(file);
-						controller.reset();//ERROR si el archivo no es deseado no?
+						controller.reset();
 						controller.loadBodies(is);
 					} catch (FileNotFoundException e1) {
 						e1.printStackTrace();
@@ -144,7 +141,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	
 	private void initLawConfButton() {
 
-		lawConfButton = new JButton(new ImageIcon("resources/icons/physics.png"));//Ambas formas valdrian
+		lawConfButton = new JButton(new ImageIcon("resources/icons/physics.png"));//Ambas formas valdrían
 		lawConfButton.setToolTipText("Seleccionar ley de gravitación");
 		lawConfButton.addActionListener(new ActionListener(){
 			@Override
@@ -228,10 +225,8 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 			try {
 				controller.run(1);
 			} catch (Exception e) {
-				// TODO show the error in a dialog box
 				JOptionPane.showMessageDialog(null, e.getMessage());
 
-				// TODO enable all buttons
 				buttonEnable(true);
 
 				stopped = true;
@@ -245,7 +240,6 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 			});
 		} else {
 			stopped = true;
-			// TODO enable all buttons
 			buttonEnable(true);
 		}
 	}

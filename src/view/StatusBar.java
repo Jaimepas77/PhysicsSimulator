@@ -1,9 +1,7 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.util.List;
 
 import javax.swing.*;
@@ -14,9 +12,6 @@ import simulator.model.SimulatorObserver;
 
 public class StatusBar extends JPanel implements SimulatorObserver {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	// ...

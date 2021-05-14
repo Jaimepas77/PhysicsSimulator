@@ -10,9 +10,7 @@ import javax.swing.*;
 import simulator.control.Controller;
 
 public class MainWindow extends JFrame {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	
 	private ControlPanel controlPanel;

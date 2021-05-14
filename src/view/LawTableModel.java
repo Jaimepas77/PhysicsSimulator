@@ -9,33 +9,30 @@ import org.json.JSONObject;
 
 public class LawTableModel extends AbstractTableModel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private String[] columns = {"Key", "Value", "Description"};
-	/*private List<String> keys;
-	private List<String> values;*/
 	private List<LawRowInfo> attributes;
 	
 	private JSONObject law;
 	
 	public LawTableModel(JSONObject law){
+		attributes = new ArrayList<LawRowInfo>();
 		update(law);
 	}
 	
 	public void update(JSONObject law) {
-		//this.law = new JSONObject(law.toString());//Una copia de law
-		this.law = law;
 		
-		attributes = new ArrayList<LawRowInfo>();
-		
-		for(String key : law.getJSONObject("data").keySet()) {
-			attributes.add(new LawRowInfo(key, new String(), law.getJSONObject("data").get(key).toString()));
+		if( attributes.isEmpty() || !this.law.getString("type").equals(law.getString("type"))) {
+			this.law = new JSONObject(law.toString());//Una copia de law
+			attributes.clear();
+			for(String key : law.getJSONObject("data").keySet()) {
+				attributes.add(new LawRowInfo(key, new String(), law.getJSONObject("data").getString(key)));
+			}
 		}
 		
 		fireTableStructureChanged();
+		
 	}
 	
 	@Override
@@ -45,7 +42,7 @@ public class LawTableModel extends AbstractTableModel {
 	
 	@Override
 	public int getRowCount() {
-		return law.getJSONObject("data").length();
+		return attributes.size();
 	}
 
 	@Override
@@ -80,6 +77,7 @@ public class LawTableModel extends AbstractTableModel {
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		attributes.get(row).setValue((String) value);
+		
 	}
 	
 	public JSONObject getJSONObject() {//Orientado por dialogExample
@@ -98,9 +96,9 @@ public class LawTableModel extends AbstractTableModel {
 		if (s.length() > 1)
 			s.deleteCharAt(s.length() - 1);
 		s.append('}');
-		
 		JSONObject data = new JSONObject(s.toString());
-		law.put("data", data);//Se devuelve un JSON con todos las informaciones (tipo y data) data actualizado segun la tabla
+		law.put("data", data);
+		
 		return law;
 	}
 
