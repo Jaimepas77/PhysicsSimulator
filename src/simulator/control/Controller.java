@@ -61,13 +61,6 @@ public class Controller {
 	}
 	
 	public void run(int steps, OutputStream out, InputStream expOut, StateComparator cmp) throws JSONException, NotEqualStatesException  {//Ejecuta el simulador n veces, comparando el estado con lo esperado cada vez. 
-		
-		new OutputStream() {
-			@Override
-			public void write(int b) throws IOException {
-				//No escribimos nada en la consola...
-			};
-		};
 
 		JSONObject JSONCmpS = null;//Para comparar nuestro salida con los esperados
 		PrintStream p = new PrintStream(out);//Salida

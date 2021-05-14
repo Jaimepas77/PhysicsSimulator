@@ -2,7 +2,6 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
@@ -77,10 +76,15 @@ public class LawConfDialog extends JDialog {
 		//ComboBox
 		initLawComboBox();
 		mainPanel.add(lawsComboBox);
-		
-		//JList
-		initLawList();
-		
+
+//		JSeparator a = new JSeparator(JSeparator.HORIZONTAL);
+//		a.setPreferredSize(new Dimension(2, 20));
+//		mainPanel.add(a);
+//		
+//		//JList
+//		initLawList();
+//		mainPanel.add(new JScrollPane(lawList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
+//		
 		//ButtonPanel
 		initButtonPanel();
 		mainPanel.add(buttonPanel);
@@ -151,10 +155,7 @@ public class LawConfDialog extends JDialog {
 				lawTableModel.update(laws.get(lawList.getSelectedIndex()));
 			}
 			}
-		);
-		
-		mainPanel.add(new JScrollPane(lawList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
-		
+		);		
 	}
 	
 	public JSONObject getJSON() {

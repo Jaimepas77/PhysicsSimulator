@@ -338,7 +338,7 @@ public class Main {
 			}
 		});
 		
-		//Es opcional i y otros se ignoran
+		//Es opcional i (-o y -s se ignoran)
 		if(_inFile != null) {
 			InputStream is = new FileInputStream(new File(_inFile));
 			controller.loadBodies(is);

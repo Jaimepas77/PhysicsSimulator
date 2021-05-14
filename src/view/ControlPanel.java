@@ -4,16 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.List;
 
 import javax.swing.*;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import simulator.control.Controller;
 import simulator.model.Body;
@@ -25,18 +18,14 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	private Controller controller;
 	private boolean stopped;
 	
+	private MainWindow mainWindow;
+	
 	//Buttons
 	private JButton fileButton;
 	private JButton lawConfButton;
 	private JButton pauseButton;
 	private JButton runButton;
 	private JButton exitButton;
-
-	//Selector de ficheros
-	private JFileChooser fileChooser;
-	
-	//Selector de fuerza gravitacional
-	LawConfDialog lawDialog;
 	
 	//ToolBar
 	private JToolBar toolBar;
@@ -47,8 +36,9 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	JTextField deltaTime;//Campo de texto en el que se introduce el tiempo por paso
 	
 	
-	ControlPanel(Controller controller){
+	ControlPanel(Controller controller, MainWindow mainWindow){
 		this.controller = controller;
+		this.mainWindow = mainWindow;
 		stopped = false;
 		initGUI();
 		controller.addObserver(this);
@@ -112,29 +102,12 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		fileButton = new JButton(new ImageIcon("resources\\icons\\open.png"));//Completar dir
 		fileButton.setToolTipText("Seleccionar fichero fuente");
 		
-		fileChooser = new JFileChooser();//Se inicializa el fileChooser que luego se empleara cada vez que se pulse el boton
-		fileChooser.setCurrentDirectory(new File("resources\\examples"));
-		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		
 		fileButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int selection = fileChooser.showOpenDialog(fileButton);//Abre la ventana 
-				
-				if(selection == JFileChooser.APPROVE_OPTION) {//Si selecciona
-					File file = fileChooser.getSelectedFile();
-					try {
-						InputStream is = new FileInputStream(file);
-						controller.reset();
-						controller.loadBodies(is);
-					} catch (FileNotFoundException e1) {
-						e1.printStackTrace();
-					}
-					catch (JSONException e2) {
-						JOptionPane.showMessageDialog(null, "Error en el JSON: " + e2.getMessage(),  "ERROR", JOptionPane.ERROR_MESSAGE);
-					}
-				}
+				mainWindow.chooseFile();
 			}
+
 		}
 		);
 	}
@@ -146,25 +119,12 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		lawConfButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(lawDialog == null) {//Crear si no se ha creado aún
-					lawDialog = new LawConfDialog(null, controller.getForceLawsInfo());
-				}
-				
-				int i = lawDialog.getStatus();//Obtener la info del usuario
-				if(i == 1) {
-					try {
-						JSONObject info = lawDialog.getJSON();
-						controller.setForceLaws(info);
-					}
-					catch(Exception error) {
-						JOptionPane.showMessageDialog(null, error.getMessage());
-					}
-				}
+				mainWindow.lawConfWindow();
 			}
 		}
 		);
 	}
-	
+
 	
 	private void initRunButton() {
 		runButton  = new JButton(new ImageIcon("resources/icons/run.png"));
@@ -174,25 +134,13 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//Desactivar todos los botones
-				buttonEnable(false);
-				
-				stopped = false;
-				try {
-					controller.setStepTime(Double.parseDouble(deltaTime.getText()));//Se ajusta el delta time según ha especificado el usuario (stepTime = deltaTime)
-
-					run_sim((int)steps.getValue());
-				}
-				catch (IllegalArgumentException error) {
-					JOptionPane.showMessageDialog(null, error.getMessage());
-					buttonEnable(true);
-					stopped = true;
-				}
+				mainWindow.initRun();
 			}
+
 		}
 		);		
 	}
-	
+			
 	private void initPauseButton() {
 		pauseButton = new JButton(new ImageIcon("resources/icons/stop.png"));
 		pauseButton.setToolTipText("Pausar");
@@ -201,7 +149,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				stopped = true;
+				setStopped(true);
 			}
 		}
 		);
@@ -215,19 +163,19 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				quit();
+				mainWindow.quit();
 			}
 		});
 	}
 	
-	private void run_sim(int n) {
+	void run_sim(int n) {
 		if (n > 0 && !stopped) {
 			try {
 				controller.run(1);
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, e.getMessage());
 
-				buttonEnable(true);
+				mainWindow.buttonEnable(true);
 
 				stopped = true;
 				return;
@@ -240,7 +188,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 			});
 		} else {
 			stopped = true;
-			buttonEnable(true);
+			mainWindow.buttonEnable(true);
 		}
 	}
 
@@ -272,7 +220,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	public void onForceLawsChanged(String fLawsDesc) {
 	}
 	
-	private void buttonEnable(boolean value) {
+	protected void buttonEnable(boolean value) {
 		fileButton.setEnabled(value);
 		lawConfButton.setEnabled(value);
 		if(value) {//El button de pausa nunca se deshabilita
@@ -284,10 +232,16 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		steps.setEnabled(value);
 	}
 	
-	protected void quit() {
-		int op = JOptionPane.showConfirmDialog(exitButton, "¿Seguro que quieres salir?", "Ventana de confirmación", JOptionPane.YES_NO_OPTION);
-		if(op == JOptionPane.YES_OPTION) {
-			System.exit(0);
-		}
+	public int getSteps() {
+		return (int)steps.getValue();
 	}
+
+	public double getDeltaTime() {
+		return Double.parseDouble(deltaTime.getText());
+	}
+
+	public void setStopped(boolean stopped) {
+		this.stopped = stopped;
+	}
+
 }
