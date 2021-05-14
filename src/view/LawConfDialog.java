@@ -98,7 +98,7 @@ public class LawConfDialog extends JDialog {
 	}
 	
 	private void initLawTable() {
-		//Tabla de Configuracion
+		//Tabla de Configuración
 		lawTableModel = new LawTableModel(laws.get(index));
 		lawTable = new JTable(lawTableModel);
 	}
